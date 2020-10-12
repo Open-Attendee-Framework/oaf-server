@@ -1,0 +1,9 @@
+development:
+    dialect: sqlite3
+    datasource: test.db
+    dir: sqlite
+
+production:
+    dialect: postgres
+    datasource: dbname=ofa-server sslmode=disable
+    dir: postgres
