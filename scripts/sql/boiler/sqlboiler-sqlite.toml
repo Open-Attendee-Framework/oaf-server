@@ -1,8 +1,0 @@
-output   = "../../../internal/db/sqlitemodel"
-wipe     = true
-no-tests = true
-pkgname  = "sqlitemodel"
-
-[sqlite3]
-  dbname = "../oaf.db"
-  blacklist = ["migrations"]
