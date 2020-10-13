@@ -1,10 +1,10 @@
-development:
+sqlite:
     dialect: sqlite3
     datasource: ../oaf.db
     dir: sqlite
     table: migrations
 
-production:
+postgres:
     dialect: postgres
     datasource: dbname=oaf-server user=oaf-server password=oaf-server sslmode=disable
     dir: postgres
