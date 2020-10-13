@@ -1,6 +1,6 @@
 development:
     dialect: sqlite3
-    datasource: test.db
+    datasource: ../oaf.db
     dir: sqlite
     table: migrations
 
