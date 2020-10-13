@@ -6,6 +6,6 @@ development:
 
 production:
     dialect: postgres
-    datasource: dbname=ofa-server sslmode=disable
+    datasource: dbname=oaf-server user=oaf-server password=oaf-server sslmode=disable
     dir: postgres
     table: migrations
