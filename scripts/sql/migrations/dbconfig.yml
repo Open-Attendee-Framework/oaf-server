@@ -2,8 +2,10 @@ development:
     dialect: sqlite3
     datasource: test.db
     dir: sqlite
+    table: migrations
 
 production:
     dialect: postgres
     datasource: dbname=ofa-server sslmode=disable
     dir: postgres
+    table: migrations

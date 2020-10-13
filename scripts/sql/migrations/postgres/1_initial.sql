@@ -29,8 +29,6 @@ CREATE TABLE "Members" (
 	"UserID" serial NOT NULL,
 	"Rights" serial NOT NULL,
 	CONSTRAINT "Members_pk" PRIMARY KEY ("SectionID", "UserID")
-) WITH (
-  OIDS=FALSE
 );
 
 
@@ -44,8 +42,6 @@ CREATE TABLE "Events" (
 	"End" TIMESTAMP,
 	"Creator" integer,
 	CONSTRAINT "Events_pk" PRIMARY KEY ("EventID")
-) WITH (
-  OIDS=FALSE
 );
 
 
@@ -54,9 +50,8 @@ CREATE TABLE "Attendees" (
 	"EventID" integer NOT NULL,
 	"UserID" integer NOT NULL,
 	"Commitment" integer NOT NULL,
-	"Comment" integer NOT NULL
-) WITH (
-  OIDS=FALSE
+	"Comment" integer NOT NULL,
+	CONSTRAINT "Attendees_pk" PRIMARY KEY ("EventID", "UserID")
 );
 
 
@@ -65,10 +60,8 @@ CREATE TABLE "Comments" (
 	"CommentID" serial NOT NULL,
 	"EventID" integer NOT NULL,
 	"UserID" serial NOT NULL,
-	"Comment" VARCHAR(255) NOT NULL,
+	"Comment" VARCHAR(255),
 	CONSTRAINT "Comments_pk" PRIMARY KEY ("CommentID")
-) WITH (
-  OIDS=FALSE
 );
 
 
@@ -78,12 +71,14 @@ CREATE TABLE "Section" (
 	"OrganizationID" integer NOT NULL,
 	"Name" VARCHAR(255) NOT NULL,
 	CONSTRAINT "Section_pk" PRIMARY KEY ("SectionID")
-) WITH (
-  OIDS=FALSE
 );
 
 
-
+CREATE TABLE "Info" (
+	"Key" varchar(255) NOT NULL,
+	"Value" varchar(255) NOT NULL,
+	CONSTRAINT "Info_pk" PRIMARY KEY ("Key")
+);
 
 
 ALTER TABLE "Members" ADD CONSTRAINT "Members_fk0" FOREIGN KEY ("SectionID") REFERENCES "Section"("SectionID");
@@ -108,3 +103,4 @@ DROP TABLE "Events";
 DROP TABLE "Attendees";
 DROP TABLE "Comments";
 DROP TABLE "Section";
+DROP TABLE "Info";
