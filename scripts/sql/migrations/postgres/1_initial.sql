@@ -12,6 +12,7 @@ CREATE TABLE "Users" (
 	"UserID" serial NOT NULL,
 	"Username" VARCHAR(255) NOT NULL,
 	"Password" VARCHAR(255) NOT NULL,
+	"Salt" VARCHAR(255) NOT NULL,
 	"Shownname" VARCHAR(255),
 	"EMail" VARCHAR(255) NOT NULL,
 	"SuperUser" BOOLEAN NOT NULL,
