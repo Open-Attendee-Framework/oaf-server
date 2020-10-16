@@ -10,7 +10,7 @@ CREATE TABLE "Organizations" (
 
 CREATE TABLE "Users" (
 	"UserID" serial NOT NULL,
-	"Username" VARCHAR(255) NOT NULL,
+	"Username" VARCHAR(255) NOT NULL UNIQUE,
 	"Password" VARCHAR(255) NOT NULL,
 	"Salt" VARCHAR(255) NOT NULL,
 	"Shownname" VARCHAR(255),

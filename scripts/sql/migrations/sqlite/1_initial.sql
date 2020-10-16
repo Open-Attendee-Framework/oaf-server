@@ -58,7 +58,7 @@ CREATE TABLE Sections (
 -- Table: Users
 CREATE TABLE Users (
 	UserID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-	Username TEXT NOT NULL, 
+	Username TEXT NOT NULL UNIQUE, 
 	Password TEXT NOT NULL,
 	Salt TEXT NOT NULL, 
 	Shownname TEXT, 

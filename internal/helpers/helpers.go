@@ -1,6 +1,11 @@
 package helpers
 
-import "os"
+import (
+	"encoding/hex"
+	"os"
+
+	"golang.org/x/crypto/scrypt"
+)
 
 //FileExists check if a file exists
 func FileExists(path string) (bool, error) {
@@ -12,4 +17,23 @@ func FileExists(path string) (bool, error) {
 		return false, nil
 	}
 	return true, err
+}
+
+//GeneratePasswordHash takes a password and a salt to generate a SCRYPT hashed password
+func GeneratePasswordHash(p, s string) (string, error) {
+	dk, err := scrypt.Key([]byte(p), []byte(s), 32768, 8, 1, 32)
+	if err != nil {
+		return "", err
+	}
+	h := hex.EncodeToString(dk)
+	return h, err
+}
+
+//CopyIfNotEmpty takes two strings an copies the second one over the first if its not empty
+func CopyIfNotEmpty(str1, str2 string) string {
+	if str2 != "" {
+		return str2
+	}
+	return str1
+
 }
