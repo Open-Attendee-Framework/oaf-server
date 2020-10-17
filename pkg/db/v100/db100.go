@@ -125,7 +125,7 @@ type User struct {
 //DoesUserExist gives back a boolean if the User with this Username can be found in the Database
 func DoesUserExist(username string) (bool, error) {
 	var u User
-	query := db.Rebind("SELECT * FROM User WHERE Username = ? LIMIT 1")
+	query := db.Rebind(`SELECT * FROM "User" WHERE "Username" = ? LIMIT 1`)
 	err := db.Get(&u, query, username)
 	b := (u.UserID > 0)
 	if err == sql.ErrNoRows {
@@ -140,7 +140,7 @@ func DoesUserExist(username string) (bool, error) {
 //GetUsers gives back all Users in the Database
 func GetUsers() ([]User, error) {
 	var u []User
-	err := db.Select(&u, "SELECT * FROM Users")
+	err := db.Select(&u, `SELECT * FROM "Users"`)
 	if err != nil {
 		return u, errors.New("Error getting Users:" + err.Error())
 	}
@@ -149,7 +149,7 @@ func GetUsers() ([]User, error) {
 
 //GetDetailstoUsername takes a User struct with only the Username and tries to fetch the remaining infos
 func (u *User) GetDetailstoUsername() error {
-	query := db.Rebind("SELECT * FROM Users WHERE Username = ? LIMIT 1")
+	query := db.Rebind(`SELECT * FROM "Users" WHERE "Username" = ? LIMIT 1`)
 	err := db.Get(u, query, u.Username)
 	if err != nil {
 		return errors.New("Error getting user details:" + err.Error())
@@ -159,7 +159,7 @@ func (u *User) GetDetailstoUsername() error {
 
 //GetDetails takes a User struct with only the UserID and tries to fetch the remaining infos
 func (u *User) GetDetails() error {
-	query := db.Rebind("SELECT * FROM Users WHERE UserID = ? LIMIT 1")
+	query := db.Rebind(`SELECT * FROM "Users" WHERE UserID = ? LIMIT 1`)
 	err := db.Get(u, query, u.Username)
 	if err != nil {
 		return errors.New("Error getting user details:" + err.Error())
@@ -183,7 +183,7 @@ func (u *User) Patch(ou User) error {
 
 //Update updates all Userfields in the Database
 func (u *User) Update() error {
-	query := db.Rebind("UPDATE Users SET Username = ?, Password = ?, Salt = ?, Shownname = ?, EMail = ? WHERE UserID = ?")
+	query := db.Rebind(`UPDATE "Users" SET "Username" = ?, "Password" = ?, "Salt" = ?, "Shownname" = ?, "EMail" = ? WHERE "UserID" = ?`)
 	_, err := db.Exec(query, u.Username, u.Password, u.Salt, u.Shownname, u.EMail, u.UserID)
 	if err != nil {
 		return errors.New("Error updating user:" + err.Error())
@@ -241,7 +241,7 @@ func (u *User) Insert() error {
 
 //DeleteUser delets user with the given UserID
 func DeleteUser(id int) error {
-	query := db.Rebind(`DELETE FROM Users WHERE UserID = ?`)
+	query := db.Rebind(`DELETE FROM "Users" WHERE "UserID" = ?`)
 	_, err := db.Exec(query, id)
 	if err != nil {
 		return errors.New("Error deleting User: " + err.Error())
