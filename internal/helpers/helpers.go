@@ -1,10 +1,16 @@
 package helpers
 
 import (
+	"crypto/rand"
 	"encoding/hex"
+	"io"
 	"os"
 
 	"golang.org/x/crypto/scrypt"
+)
+
+const (
+	saltSize = 32
 )
 
 //FileExists check if a file exists
@@ -17,6 +23,13 @@ func FileExists(path string) (bool, error) {
 		return false, nil
 	}
 	return true, err
+}
+
+//GenerateSalt generates a random Salt for a Passowrd
+func GenerateSalt() (string, error) {
+	buf := make([]byte, saltSize)
+	_, err := io.ReadFull(rand.Reader, buf)
+	return string(buf), err
 }
 
 //GeneratePasswordHash takes a password and a salt to generate a SCRYPT hashed password

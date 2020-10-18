@@ -113,19 +113,19 @@ type Section struct {
 
 //User is a singe User of the OAF
 type User struct {
-	UserID    int            `json:"userid"`
-	Username  string         `json:"username"`
-	Password  string         `json:"password"`
-	Salt      string         `json:"-"`
-	Shownname sql.NullString `json:"shownname"`
-	EMail     string         `json:"email"`
-	SuperUser bool           `json:"superuser"`
+	UserID    int            `json:"userid" db:"UserID"`
+	Username  string         `json:"username" db:"Username"`
+	Password  string         `json:"password" db:"Password"`
+	Salt      string         `json:"-" db:"Salt"`
+	Shownname sql.NullString `json:"shownname" db:"Shownname"`
+	EMail     string         `json:"email" db:"EMail"`
+	SuperUser bool           `json:"superuser" db:"SuperUser"`
 }
 
 //DoesUserExist gives back a boolean if the User with this Username can be found in the Database
 func DoesUserExist(username string) (bool, error) {
 	var u User
-	query := db.Rebind(`SELECT * FROM "User" WHERE "Username" = ? LIMIT 1`)
+	query := db.Rebind(`SELECT * FROM "Users" WHERE "Username" = ? LIMIT 1`)
 	err := db.Get(&u, query, username)
 	b := (u.UserID > 0)
 	if err == sql.ErrNoRows {
@@ -160,7 +160,7 @@ func (u *User) GetDetailstoUsername() error {
 //GetDetails takes a User struct with only the UserID and tries to fetch the remaining infos
 func (u *User) GetDetails() error {
 	query := db.Rebind(`SELECT * FROM "Users" WHERE UserID = ? LIMIT 1`)
-	err := db.Get(u, query, u.Username)
+	err := db.Get(u, query, u.UserID)
 	if err != nil {
 		return errors.New("Error getting user details:" + err.Error())
 	}
@@ -178,6 +178,7 @@ func (u *User) Patch(ou User) error {
 		u.Password = p
 	}
 	u.EMail = helpers.CopyIfNotEmpty(u.EMail, ou.EMail)
+	u.Shownname.String = helpers.CopyIfNotEmpty(u.Shownname.String, ou.Shownname.String)
 	return nil
 }
 
