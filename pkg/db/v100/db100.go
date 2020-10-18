@@ -59,56 +59,56 @@ func Initialisation(dbc config.DatabaseConnection) {
 
 //Attendee manages Useres that attend a single Event
 type Attendee struct {
-	EventID    int            `json:"eventid"`
-	UserID     int            `json:"userid"`
-	Commitment int            `json:"commitment"`
-	Comment    sql.NullString `json:"comment"`
+	EventID    int            `json:"eventid" db:"EventID"`
+	UserID     int            `json:"userid" db:"UserID"`
+	Commitment int            `json:"commitment" db:"Commitment"`
+	Comment    sql.NullString `json:"comment" db:"Comment"`
 }
 
 //Comment holds User message for a Event "Blackboard"
 type Comment struct {
-	CommentID int    `json:"commentid"`
-	EventID   int    `json:"eventid"`
-	UserID    int    `json:"userid"`
-	Comment   string `json:"comment"`
+	CommentID int    `json:"commentid" db:"CommentID"`
+	EventID   int    `json:"eventid" db:"EventID"`
+	UserID    int    `json:"userid" db:"UserID"`
+	Comment   string `json:"comment"  db:"Comment"`
 }
 
 //Event is a single Happening (Gig, Game, etc)
 type Event struct {
-	EventID        int            `json:"eventid"`
-	OrganizationID int            `json:"organizationid"`
-	Name           string         `json:"name"`
-	Address        sql.NullString `json:"address"`
-	Start          time.Time      `json:"start"`
-	End            sql.NullTime   `json:"end"`
-	Creator        int            `json:"creator"`
+	EventID        int            `json:"eventid" db:"EventID"`
+	OrganizationID int            `json:"organizationid" db:"OrganizationID"`
+	Name           string         `json:"name" db:"Name"`
+	Address        sql.NullString `json:"address" db:"Address"`
+	Start          time.Time      `json:"start" db:"Start"`
+	End            sql.NullTime   `json:"end" db:"End"`
+	Creator        int            `json:"creator" db:"Creator"`
 }
 
 //Info hold Data from the Info table which is a general key value store
 type Info struct {
-	Key   string `json:"key"`
-	Value string `json:"value"`
+	Key   string `json:"key" db:"Key"`
+	Value string `json:"value" db:"Value"`
 }
 
 //Member models the m:n relation between Users and Sections
 type Member struct {
-	SectionID int `json:"sectionid"`
-	UserID    int `json:"userid"`
-	Right     int `json:"right"`
+	SectionID int `json:"sectionid" db:"SectionID"`
+	UserID    int `json:"userid" db:"UserID"`
+	Right     int `json:"right" db:"Right"`
 }
 
 //Organization holds infos about a single Org (like orchestra, football club you name it)
 type Organization struct {
-	OrganizationID int    `json:"organizationid"`
-	Name           string `json:"name"`
-	Picture        []byte `json:"picture"`
+	OrganizationID int    `json:"organizationid" db:"OrganizationID"`
+	Name           string `json:"name" db:"Name"`
+	Picture        []byte `json:"picture" db:"Picture"`
 }
 
 //Section is a part of the Club (like Baritons or Handball Section)
 type Section struct {
-	SectionID      int    `json:"sectionid"`
-	OrganizationID int    `json:"organizationid"`
-	Name           string `json:"name"`
+	SectionID      int    `json:"sectionid" db:"SectionID"`
+	OrganizationID int    `json:"organizationid" db:"OrganizationID"`
+	Name           string `json:"name" db:"Name"`
 }
 
 //User is a singe User of the OAF
