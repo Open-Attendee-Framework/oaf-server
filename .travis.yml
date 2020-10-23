@@ -1,0 +1,13 @@
+language: go
+go:
+- master
+install:
+- go mod download
+notifications:
+  email:
+    developers@concertlabs.solutions
+os:
+- linux
+addons:
+    code_climate:
+        repo_token: 46a7d9e15d4c9871571aef1fa73c076ae1b43a14783b924c099fcdb8721fde04
