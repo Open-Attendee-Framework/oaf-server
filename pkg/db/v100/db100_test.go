@@ -168,3 +168,93 @@ func TestDeleteUser(t *testing.T) {
 		t.Error("Expected length 0 got ", len(uu))
 	}
 }
+
+func TestOrganizationInsert(t *testing.T) {
+
+	o := Organization{Name: "concertLabs", Picture: []byte("not actually a picture")}
+
+	err := o.Insert()
+
+	if err != nil {
+		t.Errorf("Expected no error but got %v", err)
+	}
+
+	if o.OrganizationID < 0 {
+		t.Errorf("Expected OrganizationID > 0 but got %v", o.OrganizationID)
+	}
+}
+
+func TestGetOrganizations(t *testing.T) {
+	oo, err := GetOrganizations()
+	if err != nil {
+		t.Fatalf("No error expected but got %v", err)
+	}
+	if len(oo) != 1 {
+		t.Error("Expected length 1 got ", len(oo))
+	}
+}
+
+func TestOrganizationDetails(t *testing.T) {
+	o := Organization{OrganizationID: 1}
+	err := o.GetDetails()
+	if err != nil {
+		t.Fatalf("No error expected but got %v", err)
+	}
+	if o.Name != "concertLabs" {
+		t.Errorf("Expected Name test but got %v", o.Name)
+	}
+	if len(o.Picture) != len([]byte("not actually a picture")) {
+		t.Errorf("Length of byte array different %v vs %v", len(o.Picture), len([]byte("not actually a picture")))
+	}
+}
+
+func TestPatchOrganization(t *testing.T) {
+	o := Organization{Name: "concertLabs", Picture: []byte("not actually a picture")}
+	on := Organization{Name: "concertLabs2", Picture: []byte("still not a picture")}
+
+	err := o.Patch(on)
+
+	if err != nil {
+		t.Fatalf("No error expected but got %v", err)
+	}
+
+	if o.Name != on.Name {
+		t.Errorf("Expected name to be %v but got %v", on.Name, o.Name)
+	}
+	if len(o.Picture) != len([]byte("still not a picture")) {
+		t.Errorf("Length of byte array different %v vs %v", len(o.Picture), len([]byte("still not a picture")))
+	}
+}
+
+func TestUpdateOrganization(t *testing.T) {
+	o := Organization{OrganizationID: 1, Name: "concertLabs2", Picture: []byte("still not a picture")}
+	on := Organization{OrganizationID: 1}
+	err := o.Update()
+	if err != nil {
+		t.Fatalf("No error expected but got %v", err)
+	}
+	err = on.GetDetails()
+	if err != nil {
+		t.Fatalf("No error expected but got %v", err)
+	}
+	if o.Name != on.Name {
+		t.Errorf("Found differences between old and updated name: %v %v", o.Name, on.Name)
+	}
+	if len(o.Picture) != len(on.Picture) {
+		t.Errorf("Length of byte array different %v vs %v", len(o.Picture), len(on.Picture))
+	}
+}
+
+func TestDeleteOrganization(t *testing.T) {
+	err := DeleteOrganization(1)
+	if err != nil {
+		t.Fatalf("No error expected but got %v", err)
+	}
+	oo, err := GetOrganizations()
+	if err != nil {
+		t.Fatalf("No error expected but got %v", err)
+	}
+	if len(oo) != 0 {
+		t.Error("Expected length 0 got ", len(oo))
+	}
+}

@@ -20,6 +20,10 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+const (
+	pgDriverName = "pgx"
+)
+
 var db *sqlx.DB
 
 //Initialisation sets up the DB connection and applies the lates migrations
@@ -27,7 +31,7 @@ func Initialisation(dbc config.DatabaseConnection) {
 	var err error
 	connector := dbc.Driver
 	if dbc.Driver == "postgres" {
-		connector = "pgx"
+		connector = pgDriverName
 	}
 	db, err = sqlx.Connect(connector, dbc.Connection)
 	if err != nil {
@@ -102,6 +106,103 @@ type Organization struct {
 	OrganizationID int    `json:"organizationid" db:"OrganizationID"`
 	Name           string `json:"name" db:"Name"`
 	Picture        []byte `json:"picture" db:"Picture"`
+}
+
+func (o *Organization) insertPG(query string) error {
+	query = query + ` RETURNING "OrganizationID"`
+	tx := db.MustBegin()
+	stmt, err := tx.Prepare(query)
+	if err != nil {
+		tx.Rollback()
+		return errors.New("Error preparing Statement:" + err.Error())
+	}
+	stmt.QueryRow(o.Name, o.Picture, false).Scan(&o.OrganizationID)
+	if err != nil {
+		tx.Rollback()
+		return errors.New("Error executing Statement:" + err.Error())
+	}
+	err = tx.Commit()
+	if err != nil {
+		return errors.New("Error executing Commit:" + err.Error())
+	}
+	return nil
+}
+
+func (o *Organization) insertOther(query string) error {
+	res, err := db.Exec(query, o.Name, o.Picture, false)
+	if err != nil {
+		return errors.New("Error inserting Organiztaion: " + err.Error())
+	}
+	newid, err := res.LastInsertId()
+	if err != nil {
+		return errors.New("Error fetching new ID: " + err.Error())
+	}
+	o.OrganizationID = int(newid)
+	return nil
+}
+
+//Insert inserts a new Organization into the database and adding the new OrganizationID into the struct
+func (o *Organization) Insert() error {
+	query := db.Rebind(`INSERT INTO "Organizations" ("Name", "Picture") VALUES (?, ?)`)
+	var err error
+	if db.DriverName() == pgDriverName {
+		err = o.insertPG(query)
+	} else {
+		err = o.insertOther(query)
+	}
+	if err != nil {
+		return errors.New("Error inserting Organization:" + err.Error())
+	}
+	return nil
+}
+
+//GetOrganizations gives back all Organizations in the Database
+func GetOrganizations() ([]Organization, error) {
+	var o []Organization
+	err := db.Select(&o, `SELECT * FROM "Organizations"`)
+	if err != nil {
+		return o, errors.New("Error getting Organizations:" + err.Error())
+	}
+	return o, nil
+}
+
+//GetDetails takes a Organization struct with only the OrganizationID and tries to fetch the remaining infos
+func (o *Organization) GetDetails() error {
+	query := db.Rebind(`SELECT * FROM "Organizations" WHERE "OrganizationID" = ? LIMIT 1`)
+	err := db.Get(o, query, o.OrganizationID)
+	if err != nil {
+		return errors.New("Error getting user details:" + err.Error())
+	}
+	return nil
+}
+
+//Patch patches a Organization with new Info from a second struct
+func (o *Organization) Patch(oo Organization) error {
+	o.Name = helpers.CopyIfNotEmpty(o.Name, oo.Name)
+	if len(oo.Picture) > 0 {
+		o.Picture = oo.Picture
+	}
+	return nil
+}
+
+//Update updates all Organization Fields in the Database
+func (o *Organization) Update() error {
+	query := db.Rebind(`UPDATE "Organizations" SET "Name" = ?, "Picture" = ? WHERE "OrganizationID" = ?`)
+	_, err := db.Exec(query, o.Name, o.Picture, o.OrganizationID)
+	if err != nil {
+		return errors.New("Error updating Organization:" + err.Error())
+	}
+	return nil
+}
+
+//DeleteOrganization deletes a organization with the given OrganizationID
+func DeleteOrganization(id int) error {
+	query := db.Rebind(`DELETE FROM "Organizations" WHERE "OrganizationID" = ?`)
+	_, err := db.Exec(query, id)
+	if err != nil {
+		return errors.New("Error deleting Organization: " + err.Error())
+	}
+	return nil
 }
 
 //Section is a part of the Club (like Baritons or Handball Section)
@@ -229,7 +330,7 @@ func (u *User) insertOther(query string) error {
 func (u *User) Insert() error {
 	query := db.Rebind(`INSERT INTO "Users" ("Username", "Password", "Salt", "EMail", "SuperUser") VALUES (?, ?, ?, ?, ?)`)
 	var err error
-	if db.DriverName() == "pgx" {
+	if db.DriverName() == pgDriverName {
 		err = u.insertPG(query)
 	} else {
 		err = u.insertOther(query)
