@@ -61,6 +61,21 @@ func Initialisation(dbc config.DatabaseConnection) {
 	log.Println("Applied ", n, "Migrations")
 }
 
+type inserter interface {
+	insertPG(query string) error
+	insertOther(query string) error
+}
+
+func insertData(i inserter, query string) error {
+	var err error
+	if db.DriverName() == pgDriverName {
+		err = i.insertPG(query)
+	} else {
+		err = i.insertOther(query)
+	}
+	return err
+}
+
 //Attendee manages Useres that attend a single Event
 type Attendee struct {
 	EventID    int            `json:"eventid" db:"EventID"`
@@ -144,12 +159,7 @@ func (o *Organization) insertOther(query string) error {
 //Insert inserts a new Organization into the database and adding the new OrganizationID into the struct
 func (o *Organization) Insert() error {
 	query := db.Rebind(`INSERT INTO "Organizations" ("Name", "Picture") VALUES (?, ?)`)
-	var err error
-	if db.DriverName() == pgDriverName {
-		err = o.insertPG(query)
-	} else {
-		err = o.insertOther(query)
-	}
+	err := insertData(o, query)
 	if err != nil {
 		return errors.New("Error inserting Organization:" + err.Error())
 	}
@@ -329,12 +339,7 @@ func (u *User) insertOther(query string) error {
 //Insert inserts a new User into the database and adding the new UserID into the struct
 func (u *User) Insert() error {
 	query := db.Rebind(`INSERT INTO "Users" ("Username", "Password", "Salt", "EMail", "SuperUser") VALUES (?, ?, ?, ?, ?)`)
-	var err error
-	if db.DriverName() == pgDriverName {
-		err = u.insertPG(query)
-	} else {
-		err = u.insertOther(query)
-	}
+	err := insertData(u, query)
 	if err != nil {
 		return errors.New("Error inserting User:" + err.Error())
 	}
