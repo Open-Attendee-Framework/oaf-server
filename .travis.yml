@@ -1,6 +1,6 @@
 env:
   global:
-    - CC_TEST_REPORTER_ID=ReporterID
+    - CC_TEST_REPORTER_ID=$ReporterID
 
 language: go
 
