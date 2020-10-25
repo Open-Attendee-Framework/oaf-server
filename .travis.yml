@@ -1,13 +1,30 @@
+env:
+  global:
+    - CC_TEST_REPORTER_ID=46a7d9e15d4c9871571aef1fa73c076ae1b43a14783b924c099fcdb8721fde04
+
 language: go
+
 go:
-- master
+  - master
+
+
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
+script:
+  - go test -coverprofile c.out ./...
+
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+
 install:
-- go mod download
+  - go mod download
+
 notifications:
   email:
     developers@concertlabs.solutions
+
 os:
-- linux
-addons:
-    code_climate:
-        repo_token: 46a7d9e15d4c9871571aef1fa73c076ae1b43a14783b924c099fcdb8721fde04
+  - linux
