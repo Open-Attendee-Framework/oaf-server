@@ -27,7 +27,7 @@ const (
 var db *sqlx.DB
 
 //Initialisation sets up the DB connection and applies the lates migrations
-func Initialisation(dbc config.DatabaseConnection) {
+func Initialisation(dbc config.DatabaseConnection) error {
 	var err error
 	connector := dbc.Driver
 	if dbc.Driver == "postgres" {
@@ -35,7 +35,7 @@ func Initialisation(dbc config.DatabaseConnection) {
 	}
 	db, err = sqlx.Connect(connector, dbc.Connection)
 	if err != nil {
-		log.Fatalln("Error connecting to database:", err)
+		return errors.New("Error connecting to database:" + err.Error())
 	}
 
 	var migbox packr.Box
@@ -56,9 +56,10 @@ func Initialisation(dbc config.DatabaseConnection) {
 
 	n, err := migrate.Exec(db.DB, dbc.Driver, migrations, migrate.Up)
 	if err != nil {
-		log.Fatalln("Error applying migrations:", err)
+		return errors.New("Error applying migrations:" + err.Error())
 	}
 	log.Println("Applied ", n, "Migrations")
+	return nil
 }
 
 type inserter interface {

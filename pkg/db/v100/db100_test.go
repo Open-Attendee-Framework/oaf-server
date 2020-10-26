@@ -86,6 +86,24 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
+func TestInitialisation(t *testing.T) {
+	con := config.DatabaseConnection{}
+	con.Connection = "invalidCON"
+	con.Driver = "invalidDB"
+	err := Initialisation(con)
+	if err == nil {
+		t.Errorf("Expected error but got none")
+	}
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Initialisation in %s", tc.connection.Driver), func(t *testing.T) {
+			err := Initialisation(tc.connection)
+			if err != nil {
+				t.Errorf("No error expected but got %v", err)
+			}
+		})
+	}
+}
+
 func TestUserInsert(t *testing.T) {
 
 	for _, tc := range testCases {
