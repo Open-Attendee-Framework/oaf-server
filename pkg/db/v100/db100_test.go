@@ -36,7 +36,7 @@ func TestMain(m *testing.M) {
 
 func TestUserInsert(t *testing.T) {
 
-	u := User{Username: "test", Password: "test", EMail: "test@test", Shownname: sql.NullString{String: "Testiman", Valid: true}}
+	u := User{UserID: -1, Username: "test", Password: "test", EMail: "test@test", Shownname: sql.NullString{String: "Testiman", Valid: true}}
 	s, err := helpers.GenerateSalt()
 	if err != nil {
 		t.Fatalf("No error expected but got %v", err)
@@ -171,7 +171,7 @@ func TestDeleteUser(t *testing.T) {
 
 func TestOrganizationInsert(t *testing.T) {
 
-	o := Organization{Name: "concertLabs", Picture: []byte("not actually a picture")}
+	o := Organization{OrganizationID: -1, Name: "concertLabs", Picture: []byte("not actually a picture")}
 
 	err := o.Insert()
 
