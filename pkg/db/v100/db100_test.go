@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"log"
 	"os"
-	"path/filepath"
 	"testing"
 
 	"github.com/concertLabs/oaf-server/internal/helpers"
@@ -12,25 +11,57 @@ import (
 	migrate "github.com/rubenv/sql-migrate"
 )
 
-func TestMain(m *testing.M) {
-	var con config.DatabaseConnection
-	con.Driver = "sqlite3"
-	con.Connection = "test.db"
-	os.Remove(con.Connection)
-	abs, _ := filepath.Abs(con.Connection)
-	log.Println("Test Database Path:", abs)
-	Initialisation(con)
+type testCase struct {
+	connection config.DatabaseConnection
+	migration  string
+}
+
+var testCases []testCase
+
+func execMigrations(t testCase, dir migrate.MigrationDirection) {
 	migrations := &migrate.FileMigrationSource{
-		Dir: "../../../scripts/sql/migrations/sqlite",
+		Dir: t.migration,
 	}
 	migrate.SetTable("migrations")
 
-	n, err := migrate.Exec(db.DB, con.Driver, migrations, migrate.Up)
+	n, err := migrate.Exec(db.DB, t.connection.Driver, migrations, dir)
 	if err != nil {
 		log.Fatalln("Error applying migrations:", err)
 	}
 	log.Println("Applied ", n, "Migrations")
+}
+
+func setupDatabase(t testCase) {
+	Initialisation(t.connection)
+	execMigrations(t, migrate.Up)
+
+}
+
+func teardownDatabase(t testCase) {
+	execMigrations(t, migrate.Down)
+}
+
+func TestMain(m *testing.M) {
+	sqliteCase := testCase{}
+	sqliteCase.connection.Driver = "sqlite3"
+	sqliteCase.connection.Connection = "test.db"
+	sqliteCase.migration = "../../../scripts/sql/migrations/sqlite"
+	testCases = append(testCases, sqliteCase)
+	pgCase := testCase{}
+	pgCase.connection.Driver = "postgres"
+	pgCase.connection.Connection = "postgres://oaf-server:oaf-server@localhost:5432/oaf-server"
+	pgCase.migration = "../../../scripts/sql/migrations/postgres"
+	testCases = append(testCases, pgCase)
+
+	setupDatabase(sqliteCase)
 	exit := m.Run()
+	teardownDatabase(sqliteCase)
+	if exit > 0 {
+		os.Exit(exit)
+	}
+	setupDatabase(pgCase)
+	exit = m.Run()
+	teardownDatabase(pgCase)
 	os.Exit(exit)
 }
 
