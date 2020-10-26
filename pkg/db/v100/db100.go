@@ -131,7 +131,7 @@ func (o *Organization) insertPG(query string) error {
 		tx.Rollback()
 		return errors.New("Error preparing Statement:" + err.Error())
 	}
-	stmt.QueryRow(o.Name, o.Picture, false).Scan(&o.OrganizationID)
+	stmt.QueryRow(o.Name, o.Picture).Scan(&o.OrganizationID)
 	if err != nil {
 		tx.Rollback()
 		return errors.New("Error executing Statement:" + err.Error())
@@ -144,7 +144,7 @@ func (o *Organization) insertPG(query string) error {
 }
 
 func (o *Organization) insertOther(query string) error {
-	res, err := db.Exec(query, o.Name, o.Picture, false)
+	res, err := db.Exec(query, o.Name, o.Picture)
 	if err != nil {
 		return errors.New("Error inserting Organiztaion: " + err.Error())
 	}
