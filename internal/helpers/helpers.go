@@ -29,7 +29,7 @@ func FileExists(path string) (bool, error) {
 func GenerateSalt() (string, error) {
 	buf := make([]byte, saltSize)
 	_, err := io.ReadFull(rand.Reader, buf)
-	return string(buf), err
+	return hex.EncodeToString(buf), err
 }
 
 //GeneratePasswordHash takes a password and a salt to generate a SCRYPT hashed password
