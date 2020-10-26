@@ -35,7 +35,7 @@ func Initialisation(dbc config.DatabaseConnection) {
 	}
 	db, err = sqlx.Connect(connector, dbc.Connection)
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalln("Error connecting to database:", err)
 	}
 
 	var migbox packr.Box
