@@ -14,9 +14,9 @@ before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
-  - psql -c 'create database oaf-server;' -U postgres
-  - psql -c 'create user oaf-server with encrypted password 'oaf-server''
-  - psql -c 'grant all privileges on database 'oaf-server' to 'oaf-server';'
+  - psql -c 'create database "oaf-server";' -U postgres
+  - psql -c 'create user "oaf-server" with encrypted password "oaf-server";'
+  - psql -c 'grant all privileges on database "oaf-server" to "oaf-server";'
 
 script:
   - go test -coverprofile c.out ./...
