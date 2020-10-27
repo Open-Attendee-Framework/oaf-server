@@ -182,7 +182,7 @@ func (o *Organization) GetDetails() error {
 	query := db.Rebind(`SELECT * FROM "Organizations" WHERE "OrganizationID" = ? LIMIT 1`)
 	err := db.Get(o, query, o.OrganizationID)
 	if err != nil {
-		return errors.New("Error getting user details:" + err.Error())
+		return errors.New("Error getting Organization details:" + err.Error())
 	}
 	return nil
 }
@@ -221,6 +221,95 @@ type Section struct {
 	SectionID      int    `json:"sectionid" db:"SectionID"`
 	OrganizationID int    `json:"organizationid" db:"OrganizationID"`
 	Name           string `json:"name" db:"Name"`
+}
+
+func (s *Section) insertPG(query string) error {
+	query = query + ` RETURNING "SectionID"`
+	tx := db.MustBegin()
+	stmt, err := tx.Prepare(query)
+	if err != nil {
+		tx.Rollback()
+		return errors.New("Error preparing Statement:" + err.Error())
+	}
+	stmt.QueryRow(s.OrganizationID, s.Name).Scan(&s.SectionID)
+	if err != nil {
+		tx.Rollback()
+		return errors.New("Error executing Statement:" + err.Error())
+	}
+	err = tx.Commit()
+	if err != nil {
+		return errors.New("Error executing Commit:" + err.Error())
+	}
+	return nil
+}
+
+func (s *Section) insertOther(query string) error {
+	res, err := db.Exec(query, s.OrganizationID, s.Name)
+	if err != nil {
+		return errors.New("Error inserting Section: " + err.Error())
+	}
+	newid, err := res.LastInsertId()
+	if err != nil {
+		return errors.New("Error fetching new ID: " + err.Error())
+	}
+	s.SectionID = int(newid)
+	return nil
+}
+
+//Insert inserts a new Section into the database and adding the new SectionID into the struct
+func (s *Section) Insert() error {
+	query := db.Rebind(`INSERT INTO "Sections" ("OrganizationID", "Name") VALUES (?, ?)`)
+	err := insertData(s, query)
+	if err != nil {
+		return errors.New("Error inserting Section:" + err.Error())
+	}
+	return nil
+}
+
+//GetSections gives back all Sections in the Database
+func GetSections() ([]Section, error) {
+	var s []Section
+	err := db.Select(&s, `SELECT * FROM "Sections"`)
+	if err != nil {
+		return s, errors.New("Error getting Sections:" + err.Error())
+	}
+	return s, nil
+}
+
+//GetDetails takes a Section struct with only the SectionID and tries to fetch the remaining infos
+func (s *Section) GetDetails() error {
+	query := db.Rebind(`SELECT * FROM "Sections" WHERE "SectionID" = ? LIMIT 1`)
+	err := db.Get(s, query, s.SectionID)
+	if err != nil {
+		return errors.New("Error getting Section details:" + err.Error())
+	}
+	return nil
+}
+
+//Patch patches a Section with new Info from a second struct
+func (s *Section) Patch(ss Section) error {
+	s.Name = helpers.CopyIfNotEmpty(s.Name, ss.Name)
+	return nil
+}
+
+//Update updates all Section Fields in the Database
+func (s *Section) Update() error {
+	query := db.Rebind(`UPDATE "Sections" SET "Name" = ? WHERE "SectionID" = ?`)
+	_, err := db.Exec(query, s.Name, s.SectionID)
+	if err != nil {
+		return errors.New("Error updating Sections:" + err.Error())
+	}
+	return nil
+}
+
+//DeleteSection deletes a Section with the given SectionID
+func DeleteSection(id int) error {
+	query := db.Rebind(`DELETE FROM "Sections" WHERE "SectionID" = ?`)
+	_, err := db.Exec(query, id)
+	if err != nil {
+		return errors.New("Error deleting Section: " + err.Error())
+	}
+	return nil
 }
 
 //User is a singe User of the OAF

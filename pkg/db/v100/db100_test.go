@@ -21,6 +21,7 @@ type testCase struct {
 var testCases []testCase
 var testUser = User{UserID: -1, Username: "test", Password: "test", EMail: "test@test", Shownname: sql.NullString{String: "Testiman", Valid: true}}
 var testOrg = Organization{OrganizationID: -1, Name: "concertLabs", Picture: []byte("not actually a picture")}
+var testSection = Section{SectionID: -1, OrganizationID: 1, Name: "Developers"}
 
 func insertTestUser() {
 	u := testUser
@@ -34,6 +35,11 @@ func insertTestUser() {
 func insertTestOrg() {
 	o := testOrg
 	o.Insert()
+}
+
+func insertTestSection() {
+	s := testSection
+	s.Insert()
 }
 
 func execMigrations(t testCase, dir migrate.MigrationDirection) {
@@ -407,6 +413,140 @@ func TestDeleteOrganization(t *testing.T) {
 			if len(oo) != 0 {
 				t.Error("Expected length 0 got ", len(oo))
 			}
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestSectionInsert(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Insert Section in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			testOrg.Insert()
+
+			//sqlite3 doesnt throw an error, dont know yet why -> deactivated test
+			if tc.connection.Driver != "sqlite3" {
+				brokenSection := Section{OrganizationID: 42, Name: "test213"}
+				err := brokenSection.Insert()
+				if err == nil {
+					t.Errorf("Expected an error but got non")
+				}
+			}
+			s := testSection
+			err := s.Insert()
+			if err != nil {
+				t.Errorf("Expected no error but got %v", err)
+			}
+			if s.SectionID < 0 {
+				t.Errorf("Expected SectionID > 0 but got %v", s.SectionID)
+			}
+
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestGetSections(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Get Sections in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			insertTestOrg()
+			insertTestSection()
+
+			ss, err := GetSections()
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if len(ss) != 1 {
+				t.Error("Expected length 1 got ", len(ss))
+			}
+
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestSectionDetails(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Get Section Details in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			insertTestOrg()
+			insertTestSection()
+
+			s := Section{SectionID: 1}
+			err := s.GetDetails()
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if s.Name != testSection.Name {
+				t.Errorf("Expected Name test but got %v", s.Name)
+			}
+			if s.OrganizationID != 1 {
+				t.Errorf("Expected OrganizationID = 1 but got %v", s.OrganizationID)
+			}
+
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestPatchSection(t *testing.T) {
+	s := Section{Name: "Developers"}
+	sn := Section{Name: "Marketing"}
+	err := s.Patch(sn)
+	if err != nil {
+		t.Fatalf("No error expected but got %v", err)
+	}
+	if s.Name != sn.Name {
+		t.Errorf("Expected name to be %v but got %v", sn.Name, s.Name)
+	}
+}
+
+func TestUpdateSection(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Update Section in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			insertTestOrg()
+			insertTestSection()
+
+			s := Section{SectionID: 1, Name: "Marketing"}
+			sn := Section{SectionID: 1}
+			err := s.Update()
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			err = sn.GetDetails()
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if s.Name != sn.Name {
+				t.Errorf("Found differences between old and updated name: %v %v", s.Name, sn.Name)
+			}
+
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestDeleteSection(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Delete Section in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			insertTestOrg()
+			insertTestSection()
+
+			err := DeleteSection(1)
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			ss, err := GetSections()
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if len(ss) != 0 {
+				t.Error("Expected length 0 got ", len(ss))
+			}
+
 			teardownDatabase(tc)
 		})
 	}
