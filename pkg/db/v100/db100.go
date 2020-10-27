@@ -62,19 +62,48 @@ func Initialisation(dbc config.DatabaseConnection) error {
 	return nil
 }
 
-type inserter interface {
-	insertPG(query string) error
-	insertOther(query string) error
+func insertStruct(query string, returning string, a ...interface{}) (int, error) {
+	var err error
+	var nid int
+	if db.DriverName() == pgDriverName {
+		nid, err = insertStructPG(query, returning, a)
+	} else {
+		nid, err = insertStructOther(query, a)
+	}
+	return nid, err
 }
 
-func insertData(i inserter, query string) error {
-	var err error
-	if db.DriverName() == pgDriverName {
-		err = i.insertPG(query)
-	} else {
-		err = i.insertOther(query)
+func insertStructPG(query string, returning string, a []interface{}) (int, error) {
+	var newid int
+	query = query + ` RETURNING "` + returning + `"`
+	tx := db.MustBegin()
+	stmt, err := tx.Prepare(query)
+	if err != nil {
+		tx.Rollback()
+		return -1, errors.New("Error preparing Statement:" + err.Error())
 	}
-	return err
+	stmt.QueryRow(a...).Scan(newid)
+	if err != nil {
+		tx.Rollback()
+		return -1, errors.New("Error executing Statement:" + err.Error())
+	}
+	err = tx.Commit()
+	if err != nil {
+		return -1, errors.New("Error executing Commit:" + err.Error())
+	}
+	return newid, nil
+}
+
+func insertStructOther(query string, a []interface{}) (int, error) {
+	res, err := db.Exec(query, a...)
+	if err != nil {
+		return -1, errors.New("Error inserting: " + err.Error())
+	}
+	id, err := res.LastInsertId()
+	if err != nil {
+		return -1, errors.New("Error fetching new ID: " + err.Error())
+	}
+	return int(id), nil
 }
 
 //Attendee manages Useres that attend a single Event
@@ -124,43 +153,11 @@ type Organization struct {
 	Picture        []byte `json:"picture" db:"Picture"`
 }
 
-func (o *Organization) insertPG(query string) error {
-	query = query + ` RETURNING "OrganizationID"`
-	tx := db.MustBegin()
-	stmt, err := tx.Prepare(query)
-	if err != nil {
-		tx.Rollback()
-		return errors.New("Error preparing Statement:" + err.Error())
-	}
-	stmt.QueryRow(o.Name, o.Picture).Scan(&o.OrganizationID)
-	if err != nil {
-		tx.Rollback()
-		return errors.New("Error executing Statement:" + err.Error())
-	}
-	err = tx.Commit()
-	if err != nil {
-		return errors.New("Error executing Commit:" + err.Error())
-	}
-	return nil
-}
-
-func (o *Organization) insertOther(query string) error {
-	res, err := db.Exec(query, o.Name, o.Picture)
-	if err != nil {
-		return errors.New("Error inserting Organiztaion: " + err.Error())
-	}
-	newid, err := res.LastInsertId()
-	if err != nil {
-		return errors.New("Error fetching new ID: " + err.Error())
-	}
-	o.OrganizationID = int(newid)
-	return nil
-}
-
 //Insert inserts a new Organization into the database and adding the new OrganizationID into the struct
 func (o *Organization) Insert() error {
 	query := db.Rebind(`INSERT INTO "Organizations" ("Name", "Picture") VALUES (?, ?)`)
-	err := insertData(o, query)
+	var err error
+	o.OrganizationID, err = insertStruct(query, "OrganizationID", o.Name, o.Picture)
 	if err != nil {
 		return errors.New("Error inserting Organization:" + err.Error())
 	}
@@ -223,43 +220,11 @@ type Section struct {
 	Name           string `json:"name" db:"Name"`
 }
 
-func (s *Section) insertPG(query string) error {
-	query = query + ` RETURNING "SectionID"`
-	tx := db.MustBegin()
-	stmt, err := tx.Prepare(query)
-	if err != nil {
-		tx.Rollback()
-		return errors.New("Error preparing Statement:" + err.Error())
-	}
-	stmt.QueryRow(s.OrganizationID, s.Name).Scan(&s.SectionID)
-	if err != nil {
-		tx.Rollback()
-		return errors.New("Error executing Statement:" + err.Error())
-	}
-	err = tx.Commit()
-	if err != nil {
-		return errors.New("Error executing Commit:" + err.Error())
-	}
-	return nil
-}
-
-func (s *Section) insertOther(query string) error {
-	res, err := db.Exec(query, s.OrganizationID, s.Name)
-	if err != nil {
-		return errors.New("Error inserting Section: " + err.Error())
-	}
-	newid, err := res.LastInsertId()
-	if err != nil {
-		return errors.New("Error fetching new ID: " + err.Error())
-	}
-	s.SectionID = int(newid)
-	return nil
-}
-
 //Insert inserts a new Section into the database and adding the new SectionID into the struct
 func (s *Section) Insert() error {
 	query := db.Rebind(`INSERT INTO "Sections" ("OrganizationID", "Name") VALUES (?, ?)`)
-	err := insertData(s, query)
+	var err error
+	s.SectionID, err = insertStruct(query, "SectionID", s.OrganizationID, s.Name)
 	if err != nil {
 		return errors.New("Error inserting Section:" + err.Error())
 	}
@@ -393,43 +358,11 @@ func (u *User) Update() error {
 	return nil
 }
 
-func (u *User) insertPG(query string) error {
-	query = query + ` RETURNING "UserID"`
-	tx := db.MustBegin()
-	stmt, err := tx.Prepare(query)
-	if err != nil {
-		tx.Rollback()
-		return errors.New("Error preparing Statement:" + err.Error())
-	}
-	stmt.QueryRow(u.Username, u.Password, u.Salt, u.EMail, false).Scan(&u.UserID)
-	if err != nil {
-		tx.Rollback()
-		return errors.New("Error executing Statement:" + err.Error())
-	}
-	err = tx.Commit()
-	if err != nil {
-		return errors.New("Error executing Commit:" + err.Error())
-	}
-	return nil
-}
-
-func (u *User) insertOther(query string) error {
-	res, err := db.Exec(query, u.Username, u.Password, u.Salt, u.EMail, false)
-	if err != nil {
-		return errors.New("Error inserting User: " + err.Error())
-	}
-	newid, err := res.LastInsertId()
-	if err != nil {
-		return errors.New("Error fetching new ID: " + err.Error())
-	}
-	u.UserID = int(newid)
-	return nil
-}
-
 //Insert inserts a new User into the database and adding the new UserID into the struct
 func (u *User) Insert() error {
 	query := db.Rebind(`INSERT INTO "Users" ("Username", "Password", "Salt", "EMail", "SuperUser") VALUES (?, ?, ?, ?, ?)`)
-	err := insertData(u, query)
+	var err error
+	u.UserID, err = insertStruct(query, "UserID", u.Username, u.Password, u.Salt, u.EMail, u.SuperUser)
 	if err != nil {
 		return errors.New("Error inserting User:" + err.Error())
 	}
