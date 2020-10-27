@@ -62,9 +62,29 @@ func Initialisation(dbc config.DatabaseConnection) error {
 	return nil
 }
 
-func insertStruct(query string, returning string, a ...interface{}) (int, error) {
+func queryLetter(i int) string {
+	var result string
+	if i == 0 {
+		result = "( "
+	} else {
+		result = ", "
+	}
+	return result
+}
+
+func insertStruct(table string, columns []string, returning string, a ...interface{}) (int, error) {
 	var err error
 	var nid int
+	query := `INSERT INTO "` + table + `" `
+	for i, c := range columns {
+		query = query + queryLetter(i) + `"` + c + `"`
+	}
+	query = query + ") VALUES "
+	for i := 0; i < len(columns); i++ {
+		query = query + queryLetter(i) + "?"
+	}
+	query = query + ")"
+	query = db.Rebind(query)
 	if db.DriverName() == pgDriverName {
 		nid, err = insertStructPG(query, returning, a)
 	} else {
@@ -155,9 +175,8 @@ type Organization struct {
 
 //Insert inserts a new Organization into the database and adding the new OrganizationID into the struct
 func (o *Organization) Insert() error {
-	query := db.Rebind(`INSERT INTO "Organizations" ("Name", "Picture") VALUES (?, ?)`)
 	var err error
-	o.OrganizationID, err = insertStruct(query, "OrganizationID", o.Name, o.Picture)
+	o.OrganizationID, err = insertStruct("Organizations", []string{"Name", "Picture"}, "OrganizationID", o.Name, o.Picture)
 	if err != nil {
 		return errors.New("Error inserting Organization:" + err.Error())
 	}
@@ -222,9 +241,8 @@ type Section struct {
 
 //Insert inserts a new Section into the database and adding the new SectionID into the struct
 func (s *Section) Insert() error {
-	query := db.Rebind(`INSERT INTO "Sections" ("OrganizationID", "Name") VALUES (?, ?)`)
 	var err error
-	s.SectionID, err = insertStruct(query, "SectionID", s.OrganizationID, s.Name)
+	s.SectionID, err = insertStruct("Sections", []string{"OrganizationID", "Name"}, "SectionID", s.OrganizationID, s.Name)
 	if err != nil {
 		return errors.New("Error inserting Section:" + err.Error())
 	}
@@ -360,9 +378,8 @@ func (u *User) Update() error {
 
 //Insert inserts a new User into the database and adding the new UserID into the struct
 func (u *User) Insert() error {
-	query := db.Rebind(`INSERT INTO "Users" ("Username", "Password", "Salt", "EMail", "SuperUser") VALUES (?, ?, ?, ?, ?)`)
 	var err error
-	u.UserID, err = insertStruct(query, "UserID", u.Username, u.Password, u.Salt, u.EMail, u.SuperUser)
+	u.UserID, err = insertStruct("Users", []string{"Username", "Password", "Salt", "EMail", "SuperUser"}, "UserID", u.Username, u.Password, u.Salt, u.EMail, u.SuperUser)
 	if err != nil {
 		return errors.New("Error inserting User:" + err.Error())
 	}
