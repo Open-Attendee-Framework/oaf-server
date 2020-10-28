@@ -72,60 +72,6 @@ func queryLetter(i int) string {
 	return result
 }
 
-func insertStruct(table string, columns []string, returning string, a ...interface{}) (int, error) {
-	var err error
-	var nid int
-	query := `INSERT INTO "` + table + `" `
-	for i, c := range columns {
-		query = query + queryLetter(i) + `"` + c + `"`
-	}
-	query = query + ") VALUES "
-	for i := 0; i < len(columns); i++ {
-		query = query + queryLetter(i) + "?"
-	}
-	query = query + ")"
-	query = db.Rebind(query)
-	if db.DriverName() == pgDriverName {
-		nid, err = insertStructPG(query, returning, a)
-	} else {
-		nid, err = insertStructOther(query, a)
-	}
-	return nid, err
-}
-
-func insertStructPG(query string, returning string, a []interface{}) (int, error) {
-	var newid int
-	query = query + ` RETURNING "` + returning + `"`
-	tx := db.MustBegin()
-	stmt, err := tx.Prepare(query)
-	if err != nil {
-		tx.Rollback()
-		return -1, errors.New("Error preparing Statement:" + err.Error())
-	}
-	stmt.QueryRow(a...).Scan(newid)
-	if err != nil {
-		tx.Rollback()
-		return -1, errors.New("Error executing Statement:" + err.Error())
-	}
-	err = tx.Commit()
-	if err != nil {
-		return -1, errors.New("Error executing Commit:" + err.Error())
-	}
-	return newid, nil
-}
-
-func insertStructOther(query string, a []interface{}) (int, error) {
-	res, err := db.Exec(query, a...)
-	if err != nil {
-		return -1, errors.New("Error inserting: " + err.Error())
-	}
-	id, err := res.LastInsertId()
-	if err != nil {
-		return -1, errors.New("Error fetching new ID: " + err.Error())
-	}
-	return int(id), nil
-}
-
 //Attendee manages Useres that attend a single Event
 type Attendee struct {
 	EventID    int            `json:"eventid" db:"EventID"`
@@ -173,10 +119,29 @@ type Organization struct {
 	Picture        []byte `json:"picture" db:"Picture"`
 }
 
+func (o *Organization) getTablename() string {
+	return "Organizations"
+}
+
+func (o *Organization) getIDColumn() string {
+	return "OrganizationID"
+}
+
+func (o *Organization) getInsertColumns() []string {
+	return []string{"Name", "Picture"}
+}
+
+func (o *Organization) getInsertFields() []interface{} {
+	var interfaceSlice []interface{}
+	interfaceSlice = append(interfaceSlice, o.Name)
+	interfaceSlice = append(interfaceSlice, o.Picture)
+	return interfaceSlice
+}
+
 //Insert inserts a new Organization into the database and adding the new OrganizationID into the struct
 func (o *Organization) Insert() error {
 	var err error
-	o.OrganizationID, err = insertStruct("Organizations", []string{"Name", "Picture"}, "OrganizationID", o.Name, o.Picture)
+	o.OrganizationID, err = insertDBO(o)
 	if err != nil {
 		return errors.New("Error inserting Organization:" + err.Error())
 	}
@@ -239,10 +204,29 @@ type Section struct {
 	Name           string `json:"name" db:"Name"`
 }
 
+func (s *Section) getTablename() string {
+	return "Sections"
+}
+
+func (s *Section) getIDColumn() string {
+	return "SectionID"
+}
+
+func (s *Section) getInsertColumns() []string {
+	return []string{"OrganizationID", "Name"}
+}
+
+func (s *Section) getInsertFields() []interface{} {
+	var interfaceSlice []interface{}
+	interfaceSlice = append(interfaceSlice, s.OrganizationID)
+	interfaceSlice = append(interfaceSlice, s.Name)
+	return interfaceSlice
+}
+
 //Insert inserts a new Section into the database and adding the new SectionID into the struct
 func (s *Section) Insert() error {
 	var err error
-	s.SectionID, err = insertStruct("Sections", []string{"OrganizationID", "Name"}, "SectionID", s.OrganizationID, s.Name)
+	s.SectionID, err = insertDBO(s)
 	if err != nil {
 		return errors.New("Error inserting Section:" + err.Error())
 	}
@@ -376,10 +360,32 @@ func (u *User) Update() error {
 	return nil
 }
 
+func (u *User) getTablename() string {
+	return "Users"
+}
+
+func (u *User) getIDColumn() string {
+	return "UserID"
+}
+
+func (u *User) getInsertColumns() []string {
+	return []string{"Username", "Password", "Salt", "EMail", "SuperUser"}
+}
+
+func (u *User) getInsertFields() []interface{} {
+	var interfaceSlice []interface{}
+	interfaceSlice = append(interfaceSlice, u.Username)
+	interfaceSlice = append(interfaceSlice, u.Password)
+	interfaceSlice = append(interfaceSlice, u.Salt)
+	interfaceSlice = append(interfaceSlice, u.EMail)
+	interfaceSlice = append(interfaceSlice, u.SuperUser)
+	return interfaceSlice
+}
+
 //Insert inserts a new User into the database and adding the new UserID into the struct
 func (u *User) Insert() error {
 	var err error
-	u.UserID, err = insertStruct("Users", []string{"Username", "Password", "Salt", "EMail", "SuperUser"}, "UserID", u.Username, u.Password, u.Salt, u.EMail, u.SuperUser)
+	u.UserID, err = insertDBO(u)
 	if err != nil {
 		return errors.New("Error inserting User:" + err.Error())
 	}
