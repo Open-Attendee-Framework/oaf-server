@@ -93,10 +93,3 @@ type Info struct {
 	Key   string `json:"key" db:"Key"`
 	Value string `json:"value" db:"Value"`
 }
-
-//Member models the m:n relation between Users and Sections
-type Member struct {
-	SectionID int `json:"sectionid" db:"SectionID"`
-	UserID    int `json:"userid" db:"UserID"`
-	Right     int `json:"right" db:"Right"`
-}

@@ -48,17 +48,23 @@ func insertDBO(dbo databaseObject) (int, error) {
 
 func insertDBOPG(query string, returning string, a []interface{}) (int, error) {
 	var newid int
-	query = query + ` RETURNING "` + returning + `"`
+	if returning != "" {
+		query = query + ` RETURNING "` + returning + `"`
+	}
 	tx := db.MustBegin()
 	stmt, err := tx.Prepare(query)
 	if err != nil {
 		tx.Rollback()
 		return -1, errors.New("Error preparing Statement:" + err.Error())
 	}
-	stmt.QueryRow(a...).Scan(newid)
-	if err != nil {
-		tx.Rollback()
-		return -1, errors.New("Error executing Statement:" + err.Error())
+	if returning != "" {
+		stmt.QueryRow(a...).Scan(newid)
+		if err != nil {
+			tx.Rollback()
+			return -1, errors.New("Error executing Statement:" + err.Error())
+		}
+	} else {
+		stmt.QueryRow(a...)
 	}
 	err = tx.Commit()
 	if err != nil {
