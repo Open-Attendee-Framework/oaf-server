@@ -2,14 +2,16 @@ package db100
 
 import (
 	"errors"
-	"fmt"
 )
 
 type databaseObject interface {
+	getID() int
 	getTablename() string
 	getIDColumn() string
 	getInsertColumns() []string
 	getInsertFields() []interface{}
+	getUpdateColumns() []string
+	getUpdateFields() []interface{}
 }
 
 func queryLetter(i int) string {
@@ -21,6 +23,7 @@ func queryLetter(i int) string {
 	}
 	return result
 }
+
 func insertDBO(dbo databaseObject) (int, error) {
 	var err error
 	var nid int
@@ -47,7 +50,6 @@ func insertDBOPG(query string, returning string, a []interface{}) (int, error) {
 	var newid int
 	query = query + ` RETURNING "` + returning + `"`
 	tx := db.MustBegin()
-	fmt.Println(query)
 	stmt, err := tx.Prepare(query)
 	if err != nil {
 		tx.Rollback()
@@ -75,4 +77,24 @@ func insertDBOOther(query string, a []interface{}) (int, error) {
 		return -1, errors.New("Error fetching new ID: " + err.Error())
 	}
 	return int(id), nil
+}
+
+func updateDBO(dbo databaseObject) error {
+	query := `UPDATE "` + dbo.getTablename() + `" SET`
+	columns := dbo.getUpdateColumns()
+	for i, c := range columns {
+		query = query + ` "` + c + `" = ?`
+		if i != (len(columns) - 1) {
+			query = query + ","
+		}
+	}
+	query = query + `WHERE "` + dbo.getIDColumn() + `" = ?`
+	query = db.Rebind(query)
+	fields := dbo.getUpdateFields()
+	fields = append(fields, dbo.getID())
+	_, err := db.Exec(query, fields...)
+	if err != nil {
+		return errors.New("Error updating: " + err.Error())
+	}
+	return nil
 }

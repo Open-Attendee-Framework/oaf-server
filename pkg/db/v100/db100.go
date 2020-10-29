@@ -109,6 +109,10 @@ type Organization struct {
 	Picture        []byte `json:"picture" db:"Picture"`
 }
 
+func (o *Organization) getID() int {
+	return o.OrganizationID
+}
+
 func (o *Organization) getTablename() string {
 	return "Organizations"
 }
@@ -126,6 +130,14 @@ func (o *Organization) getInsertFields() []interface{} {
 	interfaceSlice = append(interfaceSlice, o.Name)
 	interfaceSlice = append(interfaceSlice, o.Picture)
 	return interfaceSlice
+}
+
+func (o *Organization) getUpdateColumns() []string {
+	return o.getInsertColumns()
+}
+
+func (o *Organization) getUpdateFields() []interface{} {
+	return o.getInsertFields()
 }
 
 //Insert inserts a new Organization into the database and adding the new OrganizationID into the struct
@@ -169,8 +181,7 @@ func (o *Organization) Patch(oo Organization) error {
 
 //Update updates all Organization Fields in the Database
 func (o *Organization) Update() error {
-	query := db.Rebind(`UPDATE "Organizations" SET "Name" = ?, "Picture" = ? WHERE "OrganizationID" = ?`)
-	_, err := db.Exec(query, o.Name, o.Picture, o.OrganizationID)
+	err := updateDBO(o)
 	if err != nil {
 		return errors.New("Error updating Organization:" + err.Error())
 	}
@@ -194,6 +205,10 @@ type Section struct {
 	Name           string `json:"name" db:"Name"`
 }
 
+func (s *Section) getID() int {
+	return s.SectionID
+}
+
 func (s *Section) getTablename() string {
 	return "Sections"
 }
@@ -203,12 +218,24 @@ func (s *Section) getIDColumn() string {
 }
 
 func (s *Section) getInsertColumns() []string {
-	return []string{"OrganizationID", "Name"}
+	result := s.getUpdateColumns()
+	result = append(result, "OrganizationID")
+	return result
 }
 
 func (s *Section) getInsertFields() []interface{} {
 	var interfaceSlice []interface{}
+	interfaceSlice = append(interfaceSlice, s.getUpdateFields()...)
 	interfaceSlice = append(interfaceSlice, s.OrganizationID)
+	return interfaceSlice
+}
+
+func (s *Section) getUpdateColumns() []string {
+	return []string{"Name"}
+}
+
+func (s *Section) getUpdateFields() []interface{} {
+	var interfaceSlice []interface{}
 	interfaceSlice = append(interfaceSlice, s.Name)
 	return interfaceSlice
 }
@@ -251,8 +278,7 @@ func (s *Section) Patch(ss Section) error {
 
 //Update updates all Section Fields in the Database
 func (s *Section) Update() error {
-	query := db.Rebind(`UPDATE "Sections" SET "Name" = ? WHERE "SectionID" = ?`)
-	_, err := db.Exec(query, s.Name, s.SectionID)
+	err := updateDBO(s)
 	if err != nil {
 		return errors.New("Error updating Sections:" + err.Error())
 	}
@@ -342,12 +368,15 @@ func (u *User) Patch(ou User) error {
 
 //Update updates all Userfields in the Database
 func (u *User) Update() error {
-	query := db.Rebind(`UPDATE "Users" SET "Username" = ?, "Password" = ?, "Salt" = ?, "Shownname" = ?, "EMail" = ? WHERE "UserID" = ?`)
-	_, err := db.Exec(query, u.Username, u.Password, u.Salt, u.Shownname, u.EMail, u.UserID)
+	err := updateDBO(u)
 	if err != nil {
 		return errors.New("Error updating user:" + err.Error())
 	}
 	return nil
+}
+
+func (u *User) getID() int {
+	return u.UserID
 }
 
 func (u *User) getTablename() string {
@@ -370,6 +399,14 @@ func (u *User) getInsertFields() []interface{} {
 	interfaceSlice = append(interfaceSlice, u.EMail)
 	interfaceSlice = append(interfaceSlice, u.SuperUser)
 	return interfaceSlice
+}
+
+func (u *User) getUpdateColumns() []string {
+	return u.getInsertColumns()
+}
+
+func (u *User) getUpdateFields() []interface{} {
+	return u.getInsertFields()
 }
 
 //Insert inserts a new User into the database and adding the new UserID into the struct
