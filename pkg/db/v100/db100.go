@@ -62,16 +62,6 @@ func Initialisation(dbc config.DatabaseConnection) error {
 	return nil
 }
 
-func queryLetter(i int) string {
-	var result string
-	if i == 0 {
-		result = "( "
-	} else {
-		result = ", "
-	}
-	return result
-}
-
 //Attendee manages Useres that attend a single Event
 type Attendee struct {
 	EventID    int            `json:"eventid" db:"EventID"`

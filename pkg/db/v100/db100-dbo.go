@@ -12,6 +12,15 @@ type databaseObject interface {
 	getInsertFields() []interface{}
 }
 
+func queryLetter(i int) string {
+	var result string
+	if i == 0 {
+		result = "( "
+	} else {
+		result = ", "
+	}
+	return result
+}
 func insertDBO(dbo databaseObject) (int, error) {
 	var err error
 	var nid int
