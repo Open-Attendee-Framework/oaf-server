@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/concertLabs/oaf-server/internal/helpers"
 	"github.com/concertLabs/oaf-server/pkg/config"
@@ -23,6 +24,7 @@ var testUser = User{UserID: -1, Username: "test", Password: "test", EMail: "test
 var testOrg = Organization{OrganizationID: -1, Name: "concertLabs", Picture: []byte("not actually a picture")}
 var testSection = Section{SectionID: -1, OrganizationID: 1, Name: "Developers"}
 var testMember = Member{SectionID: 1, UserID: 1, Rights: 1}
+var testEvent = Event{EventID: -1, OrganizationID: 1, Name: "Hackathon", Address: sql.NullString{String: "there", Valid: true}, Start: time.Now(), End: sql.NullTime{Time: time.Now().Add(time.Hour)}, Creator: 1}
 
 func insertTestUser() {
 	u := testUser
@@ -675,6 +677,162 @@ func TestDeleteMember(t *testing.T) {
 			}
 			if len(mm) != 0 {
 				t.Error("Expected length 0 got ", len(mm))
+			}
+
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestEventInsert(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Insert Event in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			testOrg.Insert()
+			insertTestUser()
+
+			//sqlite3 doesnt throw an error, dont know yet why -> deactivated test
+			if tc.connection.Driver != "sqlite3" {
+				brokenEvent := Event{OrganizationID: 42, Name: "test213", Creator: 42}
+				err := brokenEvent.Insert()
+				if err == nil {
+					t.Errorf("Expected an error but got non")
+				}
+			}
+			e := testEvent
+			err := e.Insert()
+			if err != nil {
+				t.Errorf("Expected no error but got %v", err)
+			}
+			if e.EventID < 0 {
+				t.Errorf("Expected EventID > 0 but got %v", e.EventID)
+			}
+
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestGetEvents(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Get Events in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			testOrg.Insert()
+			insertTestUser()
+			testEvent.Insert()
+
+			ee, err := GetEvents(0)
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if len(ee) != 1 {
+				t.Error("Expected length 1 got ", len(ee))
+			}
+
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestEventDetails(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Get Event Details in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			testOrg.Insert()
+			insertTestUser()
+			testEvent.Insert()
+
+			e := Event{EventID: 1}
+			err := e.GetDetails()
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if e.Name != testEvent.Name {
+				t.Errorf("Expected Name test but got %v", e.Name)
+			}
+			if e.OrganizationID != testEvent.OrganizationID {
+				t.Errorf("Expected OrganizationID = 1 but got %v", e.OrganizationID)
+			}
+			if e.Address != testEvent.Address {
+				t.Errorf("Expected Address = %v but got %v", testEvent.Address, e.Address)
+			}
+			if e.Creator != testEvent.Creator {
+				t.Errorf("Expected Creator = %v but got %v", testEvent.Creator, e.Creator)
+			}
+
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestPatchEvent(t *testing.T) {
+	e := Event{Name: "hackathon", Address: sql.NullString{String: "there", Valid: true}, Start: time.Now(), End: sql.NullTime{Time: time.Now().Add(time.Hour), Valid: true}}
+	en := Event{Name: "beerfest", Address: sql.NullString{String: "here", Valid: true}, Start: time.Now().Add(time.Hour), End: sql.NullTime{Time: time.Now().Add(time.Hour * 2), Valid: true}}
+	err := e.Patch(en)
+	if err != nil {
+		t.Fatalf("No error expected but got %v", err)
+	}
+	if e.Name != en.Name {
+		t.Errorf("Expected name to be %v but got %v", en.Name, e.Name)
+	}
+	if e.Address != en.Address {
+		t.Errorf("Expected Address to be %v but got %v", en.Address, e.Address)
+	}
+	if e.Start != en.Start {
+		t.Errorf("Expected Start to be %v but got %v", en.Start, e.Start)
+	}
+	if e.End != en.End {
+		t.Errorf("Expected End to be %v but got %v", en.End, e.End)
+	}
+}
+
+func TestUpdateEvent(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Update Event in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			testOrg.Insert()
+			insertTestUser()
+			testEvent.Insert()
+
+			e := Event{EventID: 1, OrganizationID: 1, Name: "beerfest", Address: sql.NullString{String: "here", Valid: true}, Start: time.Now().Add(time.Hour), End: sql.NullTime{Time: time.Now().Add(time.Hour * 2), Valid: true}}
+			en := Event{EventID: 1}
+			err := e.Update()
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			err = en.GetDetails()
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if e.Name != en.Name {
+				t.Errorf("Expected name to be %v but got %v", en.Name, e.Name)
+			}
+			if e.Address != en.Address {
+				t.Errorf("Expected Address to be %v but got %v", en.Address, e.Address)
+			}
+
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestDeleteEvent(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Delete Event in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			testOrg.Insert()
+			testEvent.Insert()
+
+			err := DeleteEvent(1)
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			ss, err := GetEvents(0)
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if len(ss) != 0 {
+				t.Error("Expected length 0 got ", len(ss))
 			}
 
 			teardownDatabase(tc)

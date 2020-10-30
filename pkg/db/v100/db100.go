@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"errors"
 	"log"
-	"time"
 
 	"github.com/concertLabs/oaf-server/internal/packer"
 	"github.com/concertLabs/oaf-server/pkg/config"
@@ -75,17 +74,6 @@ type Comment struct {
 	EventID   int    `json:"eventid" db:"EventID"`
 	UserID    int    `json:"userid" db:"UserID"`
 	Comment   string `json:"comment"  db:"Comment"`
-}
-
-//Event is a single Happening (Gig, Game, etc)
-type Event struct {
-	EventID        int            `json:"eventid" db:"EventID"`
-	OrganizationID int            `json:"organizationid" db:"OrganizationID"`
-	Name           string         `json:"name" db:"Name"`
-	Address        sql.NullString `json:"address" db:"Address"`
-	Start          time.Time      `json:"start" db:"Start"`
-	End            sql.NullTime   `json:"end" db:"End"`
-	Creator        int            `json:"creator" db:"Creator"`
 }
 
 //Info hold Data from the Info table which is a general key value store
