@@ -68,14 +68,6 @@ type Attendee struct {
 	Comment    sql.NullString `json:"comment" db:"Comment"`
 }
 
-//Comment holds User message for a Event "Blackboard"
-type Comment struct {
-	CommentID int    `json:"commentid" db:"CommentID"`
-	EventID   int    `json:"eventid" db:"EventID"`
-	UserID    int    `json:"userid" db:"UserID"`
-	Comment   string `json:"comment"  db:"Comment"`
-}
-
 //Info hold Data from the Info table which is a general key value store
 type Info struct {
 	Key   string `json:"key" db:"Key"`

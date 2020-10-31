@@ -57,6 +57,7 @@ CREATE TABLE "Comments" (
 	"CommentID" serial NOT NULL,
 	"EventID" integer NOT NULL,
 	"UserID" integer NOT NULL,
+	"Creation" TIMESTAMP NOT NULL,
 	"Comment" VARCHAR(255) NOT NULL,
 	CONSTRAINT "Comments_pk" PRIMARY KEY ("CommentID")
 );

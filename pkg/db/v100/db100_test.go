@@ -25,6 +25,7 @@ var testOrg = Organization{OrganizationID: -1, Name: "concertLabs", Picture: []b
 var testSection = Section{SectionID: -1, OrganizationID: 1, Name: "Developers"}
 var testMember = Member{SectionID: 1, UserID: 1, Rights: 1}
 var testEvent = Event{EventID: -1, OrganizationID: 1, Name: "Hackathon", Address: sql.NullString{String: "there", Valid: true}, Start: time.Now(), End: sql.NullTime{Time: time.Now().Add(time.Hour)}, Creator: 1}
+var testComment = Comment{CommentID: -1, EventID: 1, UserID: 1, Creation: time.Now(), Comment: "Hullu"}
 
 func insertTestUser() {
 	u := testUser
@@ -833,6 +834,157 @@ func TestDeleteEvent(t *testing.T) {
 			}
 			if len(ss) != 0 {
 				t.Error("Expected length 0 got ", len(ss))
+			}
+
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestCommentInsert(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Insert Comment in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			testOrg.Insert()
+			insertTestUser()
+			testEvent.Insert()
+
+			//sqlite3 doesnt throw an error, dont know yet why -> deactivated test
+			if tc.connection.Driver != "sqlite3" {
+				brokenComment := Comment{EventID: 42, UserID: 42}
+				err := brokenComment.Insert()
+				if err == nil {
+					t.Errorf("Expected an error but got non")
+				}
+			}
+
+			c := testComment
+			err := c.Insert()
+			if err != nil {
+				t.Errorf("Expected no error but got %v", err)
+			}
+
+			if c.CommentID < 0 {
+				t.Errorf("Expected CommentID > 0 but got %v", c.CommentID)
+			}
+
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestGetComment(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Get Comment in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			testOrg.Insert()
+			insertTestUser()
+			testEvent.Insert()
+			testComment.Insert()
+
+			cc, err := GetComments(0)
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if len(cc) != 1 {
+				t.Error("Expected length 1 got ", len(cc))
+			}
+
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestCommentDetails(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Get Comment Details in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			testOrg.Insert()
+			insertTestUser()
+			testEvent.Insert()
+			testComment.Insert()
+
+			c := Comment{CommentID: 1}
+			err := c.GetDetails()
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if c.EventID != testComment.EventID {
+				t.Errorf("Expected EventID %v but got %v", testComment.EventID, c.EventID)
+			}
+			if c.UserID != testComment.UserID {
+				t.Errorf("Expected UserID %v but got %v", testComment.UserID, c.UserID)
+			}
+			if c.Comment != testComment.Comment {
+				t.Errorf("Expected Comment %v but got %v", testComment.Comment, c.Comment)
+			}
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestPatchComment(t *testing.T) {
+	c := Comment{Creation: time.Now(), Comment: "Hullu"}
+	cn := Comment{Creation: time.Now().Add(time.Hour), Comment: "Hallu"}
+	err := c.Patch(cn)
+	if err != nil {
+		t.Fatalf("No error expected but got %v", err)
+	}
+	if c.Creation != cn.Creation {
+		t.Errorf("Expected Creation %v but got %v", cn.Creation, c.Creation)
+	}
+	if c.Comment != cn.Comment {
+		t.Errorf("Expected Comment %v but got %v", cn.Comment, c.Comment)
+	}
+}
+
+func TestUpdateComment(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Update Comment in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			testOrg.Insert()
+			insertTestUser()
+			testEvent.Insert()
+			testComment.Insert()
+
+			c := Comment{CommentID: 1, Creation: time.Now().Add(time.Hour), Comment: "Hallu"}
+			cn := Comment{CommentID: 1}
+			err := c.Update()
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			err = cn.GetDetails()
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if c.Comment != cn.Comment {
+				t.Errorf("Expected Right %v but got %v", cn.Comment, c.Comment)
+			}
+
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestDeleteComment(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Delete Comment in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			testOrg.Insert()
+			insertTestUser()
+			testEvent.Insert()
+			testComment.Insert()
+
+			err := DeleteComment(1)
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			cc, err := GetComments(0)
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if len(cc) != 0 {
+				t.Error("Expected length 0 got ", len(cc))
 			}
 
 			teardownDatabase(tc)

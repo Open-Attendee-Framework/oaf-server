@@ -94,7 +94,7 @@ func updateDBO(dbo databaseObject) error {
 			query = query + ","
 		}
 	}
-	query = query + `WHERE "` + dbo.getIDColumn() + `" = ?`
+	query = query + ` WHERE "` + dbo.getIDColumn() + `" = ?`
 	query = db.Rebind(query)
 	fields := dbo.getUpdateFields()
 	fields = append(fields, dbo.getID())
