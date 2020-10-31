@@ -44,7 +44,7 @@ func (m *Member) getUpdateFields() []interface{} {
 	return interfaceSlice
 }
 
-//Insert inserts a new Section into the database and adding the new SectionID into the struct
+//Insert inserts a new Member into the database
 func (m *Member) Insert() error {
 	var err error
 	_, err = insertDBO(m)
@@ -54,7 +54,7 @@ func (m *Member) Insert() error {
 	return nil
 }
 
-//GetMembers gives back all Sections in the Database
+//GetMembers gives back all Members in the Database
 func GetMembers() ([]Member, error) {
 	var m []Member
 	err := db.Select(&m, `SELECT * FROM "Members"`)
@@ -69,7 +69,7 @@ func (m *Member) GetDetails() error {
 	query := db.Rebind(`SELECT * FROM "Members" WHERE "UserID" = ? AND "SectionID" = ? LIMIT 1`)
 	err := db.Get(m, query, m.UserID, m.SectionID)
 	if err != nil {
-		return errors.New("Error getting Section details:" + err.Error())
+		return errors.New("Error getting Member details:" + err.Error())
 	}
 	return nil
 }

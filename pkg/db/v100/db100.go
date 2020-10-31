@@ -1,7 +1,6 @@
 package db100
 
 import (
-	"database/sql"
 	"errors"
 	"log"
 
@@ -58,14 +57,6 @@ func Initialisation(dbc config.DatabaseConnection) error {
 	}
 	log.Println("Applied ", n, "Migrations")
 	return nil
-}
-
-//Attendee manages Useres that attend a single Event
-type Attendee struct {
-	EventID    int            `json:"eventid" db:"EventID"`
-	UserID     int            `json:"userid" db:"UserID"`
-	Commitment int            `json:"commitment" db:"Commitment"`
-	Comment    sql.NullString `json:"comment" db:"Comment"`
 }
 
 //Info hold Data from the Info table which is a general key value store

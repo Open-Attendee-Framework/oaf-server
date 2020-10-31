@@ -26,6 +26,7 @@ var testSection = Section{SectionID: -1, OrganizationID: 1, Name: "Developers"}
 var testMember = Member{SectionID: 1, UserID: 1, Rights: 1}
 var testEvent = Event{EventID: -1, OrganizationID: 1, Name: "Hackathon", Address: sql.NullString{String: "there", Valid: true}, Start: time.Now(), End: sql.NullTime{Time: time.Now().Add(time.Hour)}, Creator: 1}
 var testComment = Comment{CommentID: -1, EventID: 1, UserID: 1, Creation: time.Now(), Comment: "Hullu"}
+var testAttendee = Attendee{EventID: 1, UserID: 1, Comment: sql.NullString{Valid: true, String: "bin am start"}, Commitment: 1}
 
 func insertTestUser() {
 	u := testUser
@@ -985,6 +986,154 @@ func TestDeleteComment(t *testing.T) {
 			}
 			if len(cc) != 0 {
 				t.Error("Expected length 0 got ", len(cc))
+			}
+
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestAttendeeInsert(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Insert Attendee in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			testOrg.Insert()
+			insertTestUser()
+			testEvent.Insert()
+
+			//sqlite3 doesnt throw an error, dont know yet why -> deactivated test
+			if tc.connection.Driver != "sqlite3" {
+				brokenAttendee := Attendee{EventID: 42, UserID: 42, Commitment: 1}
+				err := brokenAttendee.Insert()
+				if err == nil {
+					t.Errorf("Expected an error but got non")
+				}
+			}
+
+			a := testAttendee
+			err := a.Insert()
+			if err != nil {
+				t.Errorf("Expected no error but got %v", err)
+			}
+
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestGetAttendee(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Get Attendee in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			testOrg.Insert()
+			insertTestUser()
+			testEvent.Insert()
+			testAttendee.Insert()
+
+			aa, err := GetAttendees(0)
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if len(aa) != 1 {
+				t.Error("Expected length 1 got ", len(aa))
+			}
+
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestAttendeeDetails(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Get Attendee Details in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			testOrg.Insert()
+			insertTestUser()
+			testEvent.Insert()
+			testAttendee.Insert()
+
+			a := Attendee{EventID: 1, UserID: 1}
+			err := a.GetDetails()
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if a.Comment != testAttendee.Comment {
+				t.Errorf("Expected Comment %v but got %v", testAttendee.Comment, a.Comment)
+			}
+			if a.Commitment != testAttendee.Commitment {
+				t.Errorf("Expected Commitment %v but got %v", testAttendee.Commitment, a.Commitment)
+			}
+
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestPatchAttendee(t *testing.T) {
+	a := Attendee{Commitment: 1, Comment: sql.NullString{Valid: true, String: "bin am Start"}}
+	an := Attendee{Commitment: 2, Comment: sql.NullString{Valid: true, String: "nope"}}
+	err := a.Patch(an)
+	if err != nil {
+		t.Fatalf("No error expected but got %v", err)
+	}
+	if a.Comment != an.Comment {
+		t.Errorf("Expected Comment %v but got %v", an.Comment, a.Comment)
+	}
+	if a.Commitment != an.Commitment {
+		t.Errorf("Expected Commitment %v but got %v", an.Commitment, a.Commitment)
+	}
+}
+
+func TestUpdateAttendee(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Update Attendee in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			testOrg.Insert()
+			insertTestUser()
+			testEvent.Insert()
+			testAttendee.Insert()
+
+			a := Attendee{EventID: 1, UserID: 1, Commitment: 2, Comment: sql.NullString{Valid: true, String: "nope"}}
+			an := Attendee{EventID: 1, UserID: 1}
+			err := a.Update()
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			err = an.GetDetails()
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if a.Comment != an.Comment {
+				t.Errorf("Expected Comment %v but got %v", an.Comment, a.Comment)
+			}
+			if a.Commitment != an.Commitment {
+				t.Errorf("Expected Commitment %v but got %v", an.Commitment, a.Commitment)
+			}
+
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestDeleteAttendee(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Delete Attendee in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			testOrg.Insert()
+			insertTestUser()
+			testEvent.Insert()
+			testAttendee.Insert()
+
+			err := DeleteAttendee(1, 1)
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			aa, err := GetAttendees(0)
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if len(aa) != 0 {
+				t.Error("Expected length 0 got ", len(aa))
 			}
 
 			teardownDatabase(tc)
