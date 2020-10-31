@@ -584,14 +584,20 @@ func TestGetMember(t *testing.T) {
 			insertTestUser()
 			testMember.Insert()
 
-			mm, err := GetMembers()
+			mm, err := GetMembers(0)
 			if err != nil {
 				t.Fatalf("No error expected but got %v", err)
 			}
 			if len(mm) != 1 {
 				t.Error("Expected length 1 got ", len(mm))
 			}
-
+			mm, err = GetMembers(1)
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if len(mm) != 1 {
+				t.Error("Expected length 1 got ", len(mm))
+			}
 			teardownDatabase(tc)
 		})
 	}
@@ -673,7 +679,7 @@ func TestDeleteMember(t *testing.T) {
 			if err != nil {
 				t.Fatalf("No error expected but got %v", err)
 			}
-			mm, err := GetMembers()
+			mm, err := GetMembers(0)
 			if err != nil {
 				t.Fatalf("No error expected but got %v", err)
 			}

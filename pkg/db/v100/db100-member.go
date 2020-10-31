@@ -55,9 +55,17 @@ func (m *Member) Insert() error {
 }
 
 //GetMembers gives back all Members in the Database
-func GetMembers() ([]Member, error) {
+func GetMembers(orgid int) ([]Member, error) {
 	var m []Member
-	err := db.Select(&m, `SELECT * FROM "Members"`)
+	var err error
+	if orgid < 1 {
+		err = db.Select(&m, `SELECT * FROM "Members"`)
+	} else {
+		query := `SELECT "Members"."SectionID" AS "SectionID", "Members"."UserID" as "UserID", "Members"."Rights" as "Rights"
+		FROM "Members", "Sections" WHERE "Members"."SectionID" = "Sections"."SectionID" and "Sections"."OrganizationID" = ?`
+		query = db.Rebind(query)
+		err = db.Select(&m, query, orgid)
+	}
 	if err != nil {
 		return m, errors.New("Error getting Member:" + err.Error())
 	}
