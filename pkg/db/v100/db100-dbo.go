@@ -104,3 +104,15 @@ func updateDBO(dbo databaseObject) error {
 	}
 	return nil
 }
+
+func buildSelectQuery(dbo databaseObject, whereColumn string, whereValue int) (string, []interface{}) {
+	var is []interface{}
+	query := `SELECT * FROM "` + dbo.getTablename() + `"`
+	useWhere := (whereValue > 0)
+	if useWhere {
+		query = query + ` WHERE "` + whereColumn + `" = ?`
+		is = append(is, whereValue)
+	}
+	query = db.Rebind(query)
+	return query, is
+}

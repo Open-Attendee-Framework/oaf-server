@@ -62,17 +62,9 @@ func (a *Attendee) Insert() error {
 //GetAttendees gives back all Attendees in the Database
 func GetAttendees(eventid int) ([]Attendee, error) {
 	var a []Attendee
-	query := `SELECT * FROM "Attendees"`
-	if eventid > 0 {
-		query = query + ` WHERE "EventID" = ?`
-	}
-	query = db.Rebind(query)
-	var err error
-	if eventid > 0 {
-		err = db.Select(&a, query, eventid)
-	} else {
-		err = db.Select(&a, query)
-	}
+	var at Attendee
+	query, in := buildSelectQuery(&at, "EventID", eventid)
+	err := db.Select(&a, query, in...)
 	if err != nil {
 		return a, errors.New("Error getting Attendees:" + err.Error())
 	}

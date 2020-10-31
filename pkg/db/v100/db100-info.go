@@ -57,7 +57,9 @@ func (i *Info) Insert() error {
 //GetInfos gives back all Infos in the Database
 func GetInfos() ([]Info, error) {
 	var i []Info
-	err := db.Select(&i, `SELECT * FROM "Info"`)
+	var nfo Info
+	query, in := buildSelectQuery(&nfo, "", -1)
+	err := db.Select(&i, query, in...)
 	if err != nil {
 		return i, errors.New("Error getting Info:" + err.Error())
 	}

@@ -71,17 +71,11 @@ func (e *Event) Insert() error {
 //GetEvents gives back all Events in the Database
 func GetEvents(orgid int) ([]Event, error) {
 	var e []Event
-	query := `SELECT * FROM "Events"`
-	if orgid > 0 {
-		query = query + ` WHERE "OrganizationID" = ?`
-	}
-	query = db.Rebind(query)
+	var ev Event
+	query, in := buildSelectQuery(&ev, "OrganizationID", orgid)
 	var err error
-	if orgid > 0 {
-		err = db.Select(&e, query, orgid)
-	} else {
-		err = db.Select(&e, query)
-	}
+	err = db.Select(&e, query, in...)
+
 	if err != nil {
 		return e, errors.New("Error getting Events:" + err.Error())
 	}

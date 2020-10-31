@@ -36,7 +36,9 @@ func DoesUserExist(username string) (bool, error) {
 //GetUsers gives back all Users in the Database
 func GetUsers() ([]User, error) {
 	var u []User
-	err := db.Select(&u, `SELECT * FROM "Users"`)
+	var us User
+	query, in := buildSelectQuery(&us, "", -1)
+	err := db.Select(&u, query, in...)
 	if err != nil {
 		return u, errors.New("Error getting Users:" + err.Error())
 	}

@@ -61,7 +61,9 @@ func (s *Section) Insert() error {
 //GetSections gives back all Sections in the Database
 func GetSections() ([]Section, error) {
 	var s []Section
-	err := db.Select(&s, `SELECT * FROM "Sections"`)
+	var se Section
+	query, in := buildSelectQuery(&se, "", -1)
+	err := db.Select(&s, query, in...)
 	if err != nil {
 		return s, errors.New("Error getting Sections:" + err.Error())
 	}

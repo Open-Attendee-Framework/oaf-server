@@ -57,7 +57,9 @@ func (o *Organization) Insert() error {
 //GetOrganizations gives back all Organizations in the Database
 func GetOrganizations() ([]Organization, error) {
 	var o []Organization
-	err := db.Select(&o, `SELECT * FROM "Organizations"`)
+	var or Organization
+	query, in := buildSelectQuery(&or, "", -1)
+	err := db.Select(&o, query, in...)
 	if err != nil {
 		return o, errors.New("Error getting Organizations:" + err.Error())
 	}

@@ -68,19 +68,11 @@ func (c *Comment) Insert() error {
 //GetComments gives back all Comments in the Database
 func GetComments(eventid int) ([]Comment, error) {
 	var c []Comment
-	query := `SELECT * FROM "Comments"`
-	if eventid > 0 {
-		query = query + ` WHERE "EventID" = ?`
-	}
-	query = db.Rebind(query)
-	var err error
-	if eventid > 0 {
-		err = db.Select(&c, query, eventid)
-	} else {
-		err = db.Select(&c, query)
-	}
+	var co Comment
+	query, in := buildSelectQuery(&co, "EventID", eventid)
+	err := db.Select(&c, query, in...)
 	if err != nil {
-		return c, errors.New("Error getting Comments:" + err.Error())
+		return c, errors.New("Error getting Attendees:" + err.Error())
 	}
 	return c, nil
 }
