@@ -730,7 +730,13 @@ func TestGetEvents(t *testing.T) {
 			if len(ee) != 1 {
 				t.Error("Expected length 1 got ", len(ee))
 			}
-
+			ee, err = GetEvents(1)
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if len(ee) != 1 {
+				t.Error("Expected length 1 got ", len(ee))
+			}
 			teardownDatabase(tc)
 		})
 	}
@@ -890,7 +896,13 @@ func TestGetComment(t *testing.T) {
 			if len(cc) != 1 {
 				t.Error("Expected length 1 got ", len(cc))
 			}
-
+			cc, err = GetComments(1)
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if len(cc) != 1 {
+				t.Error("Expected length 1 got ", len(cc))
+			}
 			teardownDatabase(tc)
 		})
 	}
@@ -1037,7 +1049,13 @@ func TestGetAttendee(t *testing.T) {
 			if len(aa) != 1 {
 				t.Error("Expected length 1 got ", len(aa))
 			}
-
+			aa, err = GetAttendees(1)
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if len(aa) != 1 {
+				t.Error("Expected length 1 got ", len(aa))
+			}
 			teardownDatabase(tc)
 		})
 	}
