@@ -16,16 +16,18 @@ type Comment struct {
 	Comment   string    `json:"comment"  db:"Comment"`
 }
 
-func (c *Comment) getID() interface{} {
-	return c.CommentID
+func (c *Comment) getIDs() []interface{} {
+	var interfaceSlice []interface{}
+	interfaceSlice = append(interfaceSlice, c.CommentID)
+	return interfaceSlice
 }
 
 func (c *Comment) getTablename() string {
 	return "Comments"
 }
 
-func (c *Comment) getIDColumn() string {
-	return "CommentID"
+func (c *Comment) getIDColumns() []string {
+	return []string{"CommentID"}
 }
 
 func (c *Comment) getInsertColumns() []string {

@@ -13,16 +13,18 @@ type Organization struct {
 	Picture        []byte `json:"picture" db:"Picture"`
 }
 
-func (o *Organization) getID() interface{} {
-	return o.OrganizationID
+func (o *Organization) getIDs() []interface{} {
+	var interfaceSlice []interface{}
+	interfaceSlice = append(interfaceSlice, o.OrganizationID)
+	return interfaceSlice
 }
 
 func (o *Organization) getTablename() string {
 	return "Organizations"
 }
 
-func (o *Organization) getIDColumn() string {
-	return "OrganizationID"
+func (o *Organization) getIDColumns() []string {
+	return []string{"OrganizationID"}
 }
 
 func (o *Organization) getInsertColumns() []string {

@@ -11,36 +11,42 @@ type Member struct {
 	Rights    int `json:"rights" db:"Rights"`
 }
 
-func (m *Member) getID() interface{} {
-	return m.UserID
+func (m *Member) getIDs() []interface{} {
+	var interfaceSlice []interface{}
+	interfaceSlice = append(interfaceSlice, m.SectionID)
+	interfaceSlice = append(interfaceSlice, m.UserID)
+	return interfaceSlice
 }
 
 func (m *Member) getTablename() string {
 	return "Members"
 }
 
-func (m *Member) getIDColumn() string {
-	return ""
+func (m *Member) getIDColumns() []string {
+	return []string{"SectionID", "UserID"}
 }
 
 func (m *Member) getInsertColumns() []string {
-	return []string{"SectionID", "UserID", "Rights"}
+	result := m.getUpdateColumns()
+	result = append(result, "SectionID")
+	result = append(result, "UserID")
+	return result
 }
 
 func (m *Member) getInsertFields() []interface{} {
-	var interfaceSlice []interface{}
+	var interfaceSlice = m.getUpdateFields()
 	interfaceSlice = append(interfaceSlice, m.SectionID)
 	interfaceSlice = append(interfaceSlice, m.UserID)
-	interfaceSlice = append(interfaceSlice, m.Rights)
 	return interfaceSlice
 }
 
 func (m *Member) getUpdateColumns() []string {
-	return []string{}
+	return []string{"Rights"}
 }
 
 func (m *Member) getUpdateFields() []interface{} {
 	var interfaceSlice []interface{}
+	interfaceSlice = append(interfaceSlice, m.Rights)
 	return interfaceSlice
 }
 
@@ -90,9 +96,7 @@ func (m *Member) Patch(mm Member) error {
 
 //Update updates the Right Field of a Member in the Database
 func (m *Member) Update() error {
-	query := `UPDATE "Members" SET "Rights" = ? WHERE "UserID" = ? and "SectionID" = ?`
-	query = db.Rebind(query)
-	_, err := db.Exec(query, m.Rights, m.UserID, m.SectionID)
+	err := updateDBO(m)
 	if err != nil {
 		return errors.New("Error updating Members: " + err.Error())
 	}

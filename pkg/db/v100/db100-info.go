@@ -10,16 +10,18 @@ type Info struct {
 	Value string `json:"value" db:"Value"`
 }
 
-func (i *Info) getID() interface{} {
-	return i.Key
+func (i *Info) getIDs() []interface{} {
+	var interfaceSlice []interface{}
+	interfaceSlice = append(interfaceSlice, i.Key)
+	return interfaceSlice
 }
 
 func (i *Info) getTablename() string {
 	return "Info"
 }
 
-func (i *Info) getIDColumn() string {
-	return "Key"
+func (i *Info) getIDColumns() []string {
+	return []string{"Key"}
 }
 
 func (i *Info) getInsertColumns() []string {

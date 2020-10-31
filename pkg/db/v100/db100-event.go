@@ -19,16 +19,18 @@ type Event struct {
 	Creator        int            `json:"creator" db:"Creator"`
 }
 
-func (e *Event) getID() interface{} {
-	return e.EventID
+func (e *Event) getIDs() []interface{} {
+	var interfaceSlice []interface{}
+	interfaceSlice = append(interfaceSlice, e.EventID)
+	return interfaceSlice
 }
 
 func (e *Event) getTablename() string {
 	return "Events"
 }
 
-func (e *Event) getIDColumn() string {
-	return "EventID"
+func (e *Event) getIDColumns() []string {
+	return []string{"EventID"}
 }
 
 func (e *Event) getInsertColumns() []string {

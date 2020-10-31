@@ -2,12 +2,13 @@ package db100
 
 import (
 	"errors"
+	"fmt"
 )
 
 type databaseObject interface {
-	getID() interface{}
+	getIDs() []interface{}
 	getTablename() string
-	getIDColumn() string
+	getIDColumns() []string
 	getInsertColumns() []string
 	getInsertFields() []interface{}
 	getUpdateColumns() []string
@@ -24,6 +25,20 @@ func queryLetter(i int) string {
 	return result
 }
 
+func addColumnsToQuery(query string, columns []string, where bool) string {
+	for i, c := range columns {
+		query = query + ` "` + c + `" = ?`
+		if i != (len(columns) - 1) {
+			if where {
+				query = query + " AND"
+			} else {
+				query = query + ","
+			}
+		}
+	}
+	return query
+}
+
 func insertDBO(dbo databaseObject) (int, error) {
 	var err error
 	var nid int
@@ -38,8 +53,14 @@ func insertDBO(dbo databaseObject) (int, error) {
 	}
 	query = query + ")"
 	query = db.Rebind(query)
+	fmt.Println(query)
 	if db.DriverName() == pgDriverName {
-		nid, err = insertDBOPG(query, dbo.getIDColumn(), dbo.getInsertFields())
+		idcols := dbo.getIDColumns()
+		if len(idcols) > 1 {
+			nid, err = insertDBOPG(query, "", dbo.getInsertFields())
+		} else {
+			nid, err = insertDBOPG(query, dbo.getIDColumns()[0], dbo.getInsertFields())
+		}
 	} else {
 		nid, err = insertDBOOther(query, dbo.getInsertFields())
 	}
@@ -88,16 +109,14 @@ func insertDBOOther(query string, a []interface{}) (int, error) {
 func updateDBO(dbo databaseObject) error {
 	query := `UPDATE "` + dbo.getTablename() + `" SET`
 	columns := dbo.getUpdateColumns()
-	for i, c := range columns {
-		query = query + ` "` + c + `" = ?`
-		if i != (len(columns) - 1) {
-			query = query + ","
-		}
-	}
-	query = query + ` WHERE "` + dbo.getIDColumn() + `" = ?`
+	query = addColumnsToQuery(query, columns, false)
+	columns = dbo.getIDColumns()
+	query = query + ` WHERE`
+	query = addColumnsToQuery(query, columns, true)
 	query = db.Rebind(query)
+	fmt.Println(query)
 	fields := dbo.getUpdateFields()
-	fields = append(fields, dbo.getID())
+	fields = append(fields, dbo.getIDs()...)
 	_, err := db.Exec(query, fields...)
 	if err != nil {
 		return errors.New("Error updating: " + err.Error())

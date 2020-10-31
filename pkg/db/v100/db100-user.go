@@ -89,16 +89,18 @@ func (u *User) Update() error {
 	return nil
 }
 
-func (u *User) getID() interface{} {
-	return u.UserID
+func (u *User) getIDs() []interface{} {
+	var interfaceSlice []interface{}
+	interfaceSlice = append(interfaceSlice, u.UserID)
+	return interfaceSlice
 }
 
 func (u *User) getTablename() string {
 	return "Users"
 }
 
-func (u *User) getIDColumn() string {
-	return "UserID"
+func (u *User) getIDColumns() []string {
+	return []string{"UserID"}
 }
 
 func (u *User) getInsertColumns() []string {

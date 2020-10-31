@@ -15,37 +15,43 @@ type Attendee struct {
 	Comment    sql.NullString `json:"comment" db:"Comment"`
 }
 
-func (a *Attendee) getID() interface{} {
-	return a.UserID
+func (a *Attendee) getIDs() []interface{} {
+	var interfaceSlice []interface{}
+	interfaceSlice = append(interfaceSlice, a.EventID)
+	interfaceSlice = append(interfaceSlice, a.UserID)
+	return interfaceSlice
 }
 
 func (a *Attendee) getTablename() string {
 	return "Attendees"
 }
 
-func (a *Attendee) getIDColumn() string {
-	return ""
+func (a *Attendee) getIDColumns() []string {
+	return []string{"EventID", "UserID"}
 }
 
 func (a *Attendee) getInsertColumns() []string {
-	return []string{"EventID", "UserID", "Commitment", "Comment"}
+	result := a.getUpdateColumns()
+	result = append(result, "EventID")
+	result = append(result, "UserID")
+	return result
 }
 
 func (a *Attendee) getInsertFields() []interface{} {
-	var interfaceSlice []interface{}
+	var interfaceSlice = a.getUpdateFields()
 	interfaceSlice = append(interfaceSlice, a.EventID)
 	interfaceSlice = append(interfaceSlice, a.UserID)
-	interfaceSlice = append(interfaceSlice, a.Commitment)
-	interfaceSlice = append(interfaceSlice, a.Comment)
 	return interfaceSlice
 }
 
 func (a *Attendee) getUpdateColumns() []string {
-	return []string{}
+	return []string{"Commitment", "Comment"}
 }
 
 func (a *Attendee) getUpdateFields() []interface{} {
 	var interfaceSlice []interface{}
+	interfaceSlice = append(interfaceSlice, a.Commitment)
+	interfaceSlice = append(interfaceSlice, a.Comment)
 	return interfaceSlice
 }
 
@@ -93,9 +99,7 @@ func (a *Attendee) Patch(aa Attendee) error {
 
 //Update updates the Commitment and Comment Field of a Attendee in the Database
 func (a *Attendee) Update() error {
-	query := `UPDATE "Attendees" SET "Commitment" = ?, "Comment" = ? WHERE "UserID" = ? and "EventID" = ?`
-	query = db.Rebind(query)
-	_, err := db.Exec(query, a.Commitment, a.Comment, a.UserID, a.EventID)
+	err := updateDBO(a)
 	if err != nil {
 		return errors.New("Error updating Attendee: " + err.Error())
 	}

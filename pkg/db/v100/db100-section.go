@@ -13,16 +13,18 @@ type Section struct {
 	Name           string `json:"name" db:"Name"`
 }
 
-func (s *Section) getID() interface{} {
-	return s.SectionID
+func (s *Section) getIDs() []interface{} {
+	var interfaceSlice []interface{}
+	interfaceSlice = append(interfaceSlice, s.SectionID)
+	return interfaceSlice
 }
 
 func (s *Section) getTablename() string {
 	return "Sections"
 }
 
-func (s *Section) getIDColumn() string {
-	return "SectionID"
+func (s *Section) getIDColumns() []string {
+	return []string{"SectionID"}
 }
 
 func (s *Section) getInsertColumns() []string {
