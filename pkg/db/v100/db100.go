@@ -58,9 +58,3 @@ func Initialisation(dbc config.DatabaseConnection) error {
 	log.Println("Applied ", n, "Migrations")
 	return nil
 }
-
-//Info hold Data from the Info table which is a general key value store
-type Info struct {
-	Key   string `json:"key" db:"Key"`
-	Value string `json:"value" db:"Value"`
-}

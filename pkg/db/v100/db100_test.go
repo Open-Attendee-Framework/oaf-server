@@ -27,6 +27,7 @@ var testMember = Member{SectionID: 1, UserID: 1, Rights: 1}
 var testEvent = Event{EventID: -1, OrganizationID: 1, Name: "Hackathon", Address: sql.NullString{String: "there", Valid: true}, Start: time.Now(), End: sql.NullTime{Time: time.Now().Add(time.Hour)}, Creator: 1}
 var testComment = Comment{CommentID: -1, EventID: 1, UserID: 1, Creation: time.Now(), Comment: "Hullu"}
 var testAttendee = Attendee{EventID: 1, UserID: 1, Comment: sql.NullString{Valid: true, String: "bin am start"}, Commitment: 1}
+var testInfo = Info{Key: "Key", Value: "Value"}
 
 func insertTestUser() {
 	u := testUser
@@ -1160,6 +1161,117 @@ func TestDeleteAttendee(t *testing.T) {
 				t.Error("Expected length 0 got ", len(aa))
 			}
 
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestInfoInsert(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Insert Info in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			i := testInfo
+
+			err := i.Insert()
+
+			if err != nil {
+				t.Errorf("Expected no error but got %v", err)
+			}
+
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestGetInfos(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Get Info in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			testInfo.Insert()
+			ii, err := GetInfos()
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if len(ii) != 1 {
+				t.Error("Expected length 1 got ", len(ii))
+			}
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestInfoDetails(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Get Organiztaion Details in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			testInfo.Insert()
+			i := Info{Key: "Key"}
+			err := i.GetDetails()
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if i.Value != testInfo.Value {
+				t.Errorf("Expected Valie %v but got %v", testInfo.Value, i.Value)
+			}
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestPatchInfo(t *testing.T) {
+	i := Info{Value: "Value"}
+	in := Info{Value: "Value2"}
+
+	err := i.Patch(in)
+
+	if err != nil {
+		t.Fatalf("No error expected but got %v", err)
+	}
+
+	if i.Value != in.Value {
+		t.Errorf("Expected Value to be %v but got %v", in.Value, i.Value)
+	}
+}
+
+func TestUpdateInfo(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Update Info in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			testInfo.Insert()
+			i := Info{Key: "Key", Value: "Value2"}
+			in := Info{Key: "Key"}
+			err := i.Update()
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			err = in.GetDetails()
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if i.Value != in.Value {
+				t.Errorf("Expected Value to be %v but got %v", in.Value, i.Value)
+			}
+			teardownDatabase(tc)
+		})
+	}
+}
+
+func TestDeleteInfo(t *testing.T) {
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Delete Info in %s", tc.connection.Driver), func(t *testing.T) {
+			setupDatabase(tc)
+			testOrg.Insert()
+			err := DeleteInfo("Key")
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			ii, err := GetInfos()
+			if err != nil {
+				t.Fatalf("No error expected but got %v", err)
+			}
+			if len(ii) != 0 {
+				t.Error("Expected length 0 got ", len(ii))
+			}
 			teardownDatabase(tc)
 		})
 	}
