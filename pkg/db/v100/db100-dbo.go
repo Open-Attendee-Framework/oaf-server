@@ -5,7 +5,7 @@ import (
 )
 
 type databaseObject interface {
-	getID() int
+	getID() interface{}
 	getTablename() string
 	getIDColumn() string
 	getInsertColumns() []string

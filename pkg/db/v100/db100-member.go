@@ -11,7 +11,7 @@ type Member struct {
 	Rights    int `json:"rights" db:"Rights"`
 }
 
-func (m *Member) getID() int {
+func (m *Member) getID() interface{} {
 	return m.UserID
 }
 

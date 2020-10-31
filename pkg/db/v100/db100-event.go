@@ -19,7 +19,7 @@ type Event struct {
 	Creator        int            `json:"creator" db:"Creator"`
 }
 
-func (e *Event) getID() int {
+func (e *Event) getID() interface{} {
 	return e.EventID
 }
 

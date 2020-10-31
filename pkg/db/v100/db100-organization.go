@@ -13,7 +13,7 @@ type Organization struct {
 	Picture        []byte `json:"picture" db:"Picture"`
 }
 
-func (o *Organization) getID() int {
+func (o *Organization) getID() interface{} {
 	return o.OrganizationID
 }
 

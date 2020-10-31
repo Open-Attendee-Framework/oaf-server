@@ -16,7 +16,7 @@ type Comment struct {
 	Comment   string    `json:"comment"  db:"Comment"`
 }
 
-func (c *Comment) getID() int {
+func (c *Comment) getID() interface{} {
 	return c.CommentID
 }
 

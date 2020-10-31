@@ -15,7 +15,7 @@ type Attendee struct {
 	Comment    sql.NullString `json:"comment" db:"Comment"`
 }
 
-func (a *Attendee) getID() int {
+func (a *Attendee) getID() interface{} {
 	return a.UserID
 }
 

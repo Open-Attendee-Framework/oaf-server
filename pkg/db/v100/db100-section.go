@@ -13,7 +13,7 @@ type Section struct {
 	Name           string `json:"name" db:"Name"`
 }
 
-func (s *Section) getID() int {
+func (s *Section) getID() interface{} {
 	return s.SectionID
 }
 

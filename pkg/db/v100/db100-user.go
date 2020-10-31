@@ -87,7 +87,7 @@ func (u *User) Update() error {
 	return nil
 }
 
-func (u *User) getID() int {
+func (u *User) getID() interface{} {
 	return u.UserID
 }
 
