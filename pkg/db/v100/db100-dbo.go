@@ -2,7 +2,6 @@ package db100
 
 import (
 	"errors"
-	"fmt"
 )
 
 type databaseObject interface {
@@ -140,7 +139,6 @@ func getDetailsDBO(dest interface{}) error {
 	query = addColumnsToQuery(query, dbo.getIDColumns(), true)
 	query = query + ` LIMIT 1`
 	query = db.Rebind(query)
-	fmt.Println(query)
 	err := db.Get(dest, query, dbo.getIDs()...)
 	if err != nil {
 		return errors.New("Error Selecting:" + err.Error())
