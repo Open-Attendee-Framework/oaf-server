@@ -2,7 +2,6 @@ package db100
 
 import (
 	"errors"
-	"fmt"
 )
 
 type databaseObject interface {
@@ -53,7 +52,6 @@ func insertDBO(dbo databaseObject) (int, error) {
 	}
 	query = query + ")"
 	query = db.Rebind(query)
-	fmt.Println(query)
 	if db.DriverName() == pgDriverName {
 		idcols := dbo.getIDColumns()
 		if len(idcols) > 1 {
@@ -114,7 +112,6 @@ func updateDBO(dbo databaseObject) error {
 	query = query + ` WHERE`
 	query = addColumnsToQuery(query, columns, true)
 	query = db.Rebind(query)
-	fmt.Println(query)
 	fields := dbo.getUpdateFields()
 	fields = append(fields, dbo.getIDs()...)
 	_, err := db.Exec(query, fields...)
