@@ -57,8 +57,7 @@ func (u *User) GetDetailstoUsername() error {
 
 //GetDetails takes a User struct with only the UserID and tries to fetch the remaining infos
 func (u *User) GetDetails() error {
-	query := db.Rebind(`SELECT * FROM "Users" WHERE "UserID" = ? LIMIT 1`)
-	err := db.Get(u, query, u.UserID)
+	err := getDetailsDBO(u)
 	if err != nil {
 		return errors.New("Error getting user details:" + err.Error())
 	}

@@ -86,8 +86,7 @@ func GetEvents(orgid int) ([]Event, error) {
 
 //GetDetails takes a Event struct with only the EventID and tries to fetch the remaining infos
 func (e *Event) GetDetails() error {
-	query := db.Rebind(`SELECT * FROM "Events" WHERE "EventID" = ? LIMIT 1`)
-	err := db.Get(e, query, e.EventID)
+	err := getDetailsDBO(e)
 	if err != nil {
 		return errors.New("Error getting Event details:" + err.Error())
 	}

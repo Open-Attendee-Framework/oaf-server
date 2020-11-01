@@ -74,8 +74,7 @@ func GetSections() ([]Section, error) {
 
 //GetDetails takes a Section struct with only the SectionID and tries to fetch the remaining infos
 func (s *Section) GetDetails() error {
-	query := db.Rebind(`SELECT * FROM "Sections" WHERE "SectionID" = ? LIMIT 1`)
-	err := db.Get(s, query, s.SectionID)
+	err := getDetailsDBO(s)
 	if err != nil {
 		return errors.New("Error getting Section details:" + err.Error())
 	}

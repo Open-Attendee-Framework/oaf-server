@@ -70,8 +70,7 @@ func GetInfos() ([]Info, error) {
 
 //GetDetails takes a Info struct with only the Key and tries to fetch the remaining infos
 func (i *Info) GetDetails() error {
-	query := db.Rebind(`SELECT * FROM "Info" WHERE "Key" = ? LIMIT 1`)
-	err := db.Get(i, query, i.Key)
+	err := getDetailsDBO(i)
 	if err != nil {
 		return errors.New("Error getting Info details:" + err.Error())
 	}

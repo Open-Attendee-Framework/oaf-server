@@ -80,8 +80,7 @@ func GetMembers(orgid int) ([]Member, error) {
 
 //GetDetails takes a Member struct with only the UserID and SectionID and tries to fetch the remaining infos
 func (m *Member) GetDetails() error {
-	query := db.Rebind(`SELECT * FROM "Members" WHERE "UserID" = ? AND "SectionID" = ? LIMIT 1`)
-	err := db.Get(m, query, m.UserID, m.SectionID)
+	err := getDetailsDBO(m)
 	if err != nil {
 		return errors.New("Error getting Member details:" + err.Error())
 	}

@@ -81,8 +81,7 @@ func GetComments(eventid int) ([]Comment, error) {
 
 //GetDetails takes a Comment struct with only the CommentID and tries to fetch the remaining infos
 func (c *Comment) GetDetails() error {
-	query := db.Rebind(`SELECT * FROM "Comments" WHERE "CommentID" = ? LIMIT 1`)
-	err := db.Get(c, query, c.CommentID)
+	err := getDetailsDBO(c)
 	if err != nil {
 		return errors.New("Error getting Comment details:" + err.Error())
 	}

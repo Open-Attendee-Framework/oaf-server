@@ -79,8 +79,7 @@ func GetAttendees(eventid int) ([]Attendee, error) {
 
 //GetDetails takes a Attendee struct with only the UserID and EventID and tries to fetch the remaining infos
 func (a *Attendee) GetDetails() error {
-	query := db.Rebind(`SELECT * FROM "Attendees" WHERE "UserID" = ? AND "EventID" = ? LIMIT 1`)
-	err := db.Get(a, query, a.UserID, a.EventID)
+	err := getDetailsDBO(a)
 	if err != nil {
 		return errors.New("Error getting Attendee details:" + err.Error())
 	}

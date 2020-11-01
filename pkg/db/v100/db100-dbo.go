@@ -2,6 +2,7 @@ package db100
 
 import (
 	"errors"
+	"fmt"
 )
 
 type databaseObject interface {
@@ -131,4 +132,18 @@ func buildSelectQuery(dbo databaseObject, whereColumn string, whereValue int) (s
 	}
 	query = db.Rebind(query)
 	return query, is
+}
+
+func getDetailsDBO(dest interface{}) error {
+	dbo := dest.(databaseObject)
+	query := `SELECT * FROM "` + dbo.getTablename() + `" WHERE`
+	query = addColumnsToQuery(query, dbo.getIDColumns(), true)
+	query = query + ` LIMIT 1`
+	query = db.Rebind(query)
+	fmt.Println(query)
+	err := db.Get(dest, query, dbo.getIDs()...)
+	if err != nil {
+		return errors.New("Error Selecting:" + err.Error())
+	}
+	return nil
 }

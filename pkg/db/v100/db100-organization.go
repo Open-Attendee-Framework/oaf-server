@@ -70,8 +70,7 @@ func GetOrganizations() ([]Organization, error) {
 
 //GetDetails takes a Organization struct with only the OrganizationID and tries to fetch the remaining infos
 func (o *Organization) GetDetails() error {
-	query := db.Rebind(`SELECT * FROM "Organizations" WHERE "OrganizationID" = ? LIMIT 1`)
-	err := db.Get(o, query, o.OrganizationID)
+	err := getDetailsDBO(o)
 	if err != nil {
 		return errors.New("Error getting Organization details:" + err.Error())
 	}
