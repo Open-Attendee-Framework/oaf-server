@@ -24,7 +24,7 @@ const (
 var db *sqlx.DB
 
 //Initialisation sets up the DB connection and applies the lates migrations
-func Initialisation(dbc config.DatabaseConnection) error {
+func Initialisation(dbc config.DatabaseConnection, migdir string) error {
 	var err error
 	connector := dbc.Driver
 	if dbc.Driver == "postgres" {
@@ -45,9 +45,13 @@ func Initialisation(dbc config.DatabaseConnection) error {
 		migbox = packer.PostgresBox
 	}
 
+	if migdir == "" {
+		migdir = "./"
+	}
+
 	migrations := &migrate.PackrMigrationSource{
 		Box: migbox,
-		Dir: "./",
+		Dir: migdir,
 	}
 	migrate.SetTable("migrations")
 
