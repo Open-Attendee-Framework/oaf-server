@@ -45,14 +45,18 @@ func Initialisation(dbc config.DatabaseConnection, migdir string) error {
 		migbox = packer.PostgresBox
 	}
 
+	var migrations migrate.MigrationSource
 	if migdir == "" {
-		migdir = "./"
+		migrations = &migrate.PackrMigrationSource{
+			Box: migbox,
+			Dir: "./",
+		}
+	} else {
+		migrations = &migrate.FileMigrationSource{
+			Dir: migdir,
+		}
 	}
 
-	migrations := &migrate.PackrMigrationSource{
-		Box: migbox,
-		Dir: migdir,
-	}
 	migrate.SetTable("migrations")
 
 	n, err := migrate.Exec(db.DB, dbc.Driver, migrations, migrate.Up)
