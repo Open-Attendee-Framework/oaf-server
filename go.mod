@@ -4,11 +4,14 @@ go 1.15
 
 require (
 	github.com/cockroachdb/apd v1.1.0 // indirect
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gobuffalo/packr v1.30.1
 	github.com/gofrs/uuid v3.2.0+incompatible // indirect
+	github.com/gorilla/mux v1.7.3
 	github.com/jackc/fake v0.0.0-20150926172116-812a484cc733 // indirect
 	github.com/jackc/pgx v3.6.2+incompatible
 	github.com/jmoiron/sqlx v1.2.0
+	github.com/justinas/alice v1.2.0
 	github.com/lib/pq v1.8.0 // indirect
 	github.com/mattn/go-sqlite3 v1.14.4
 	github.com/rubenv/sql-migrate v0.0.0-20200616145509-8d140a17f351
