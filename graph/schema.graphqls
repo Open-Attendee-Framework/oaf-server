@@ -1,0 +1,178 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+enum Commitment {
+  YES
+  MAYBE
+  NO
+}
+
+# An object with a Globally Unique ID
+interface Node {
+  # The ID of the object.
+  id: ID!
+}
+
+type User implements Node {
+  id: ID!
+  username: String!
+  password: String!
+  email: String!
+  showname: String
+  superuser: Boolean!
+}
+
+type Organization implements Node {
+  id: ID!
+  name: String!
+  sections: [Section!]
+  picture: String
+}
+
+type Section implements Node {
+  id: ID!
+  name: String!
+  organization: Organization! 
+  member: [Member!]
+}
+
+type Member implements Node {
+  id: ID!
+  user: User!
+  section: Section!
+  right: Int!
+}
+
+type Event implements Node {
+  id: ID!
+  name: String!
+  description: String
+  adress: String
+  start: DateTime!
+  end: DateTime
+  creator: User!
+  comments: [Comment!]
+  attendees: [Attendee!]
+}
+
+type Comment implements Node {
+  id: ID!
+  text: String!
+  creator: User!
+  event: Event!
+}
+
+type Attendee implements Node {
+  id: ID!
+  user: User!
+  event: Event!
+  Commitment: Commitment!
+  Comment: String
+}
+
+type Invite implements Node {
+  id: ID!
+  user: User!
+  section: Section!
+}
+
+input NewUser {
+  username: String!
+  password: String!
+  email: String!
+  showname: String
+}
+
+input NewOrganization {
+  name: String!
+  picture: String
+}
+
+input NewSection {
+  name: String!
+  organization: ID!
+}
+
+input NewEvent {
+  name: String!
+  description: String
+  adress: String
+  start: DateTime!
+  end: DateTime
+}
+
+input NewInvite {
+  user: ID!
+  section: ID!
+}
+
+input Login {
+  username: String!
+  password: String!
+}
+
+input RefreshTokenInput{
+  token: String!
+}
+
+scalar DateTime
+
+type Query {
+  user (id: ID!): User
+
+  organization (id: ID!): Organization
+
+  section (id: ID!): Section
+
+  member (id: ID!): Member
+  members (section: ID, user: ID, right: Int): [Member!]
+
+  event (id: ID!): Event
+  events (organization: ID, start: DateTime, end: DateTime): [Event!]
+
+  comment (id: ID!): Comment
+  comments (event: ID!): [Comment!]
+
+  attendee (id: ID!): Attendee
+  attendees (event: ID, user: ID, commitment: Commitment): [Attendee!]
+
+  invite (id: ID!): Invite
+  invites (section: ID, user: ID): [Invite!]
+}
+
+type Mutation {
+  createUser(user: NewUser!): User!
+  updateUser(id: ID!, password: String, email: String, showname: String): User!
+  deleteUser(id: ID!): User!
+
+  createOrganization(organization: NewOrganization!): Organization!
+  updateOrganization(id: ID!, name: String, picture: String): Organization!
+  deleteOrganization(id: ID!): Organization!
+
+  createSection(section: NewSection!): Section!
+  updateSection(id: ID!, name: String!): Section!
+  deleteSection(id: ID!): Section!
+
+  createSectionMember(section: ID!, user: ID!, right: Int = 0): Member!
+  updateSectionMember(section: ID!, user: ID!, right: Int!): Member!
+  deleteSectionMember(section: ID!, user: ID!): Member!
+
+  createEvent(event: NewEvent!): Event!
+  updateEvent(id: ID!, name: String, description: String, adress: String, start: DateTime, end: DateTime): Event!
+  deleteEvent(id: ID!): Event!
+
+  createEventAttendee(event: ID!, user: ID!, commitment: Int!, comment: String): Attendee!
+  updateEventAttendee(event: ID!, user: ID!, commitment: Int!, comment: String): Attendee!
+  deleteEventAttendee(event: ID!, user: ID!): Attendee!
+
+  createEventComment(event: ID!, text: String!): Comment!
+  updateEventComment(id: ID!, text: String!): Comment!
+  deleteEventComment(id: ID!): Comment!
+
+  createInvite(invite: NewInvite!): Invite!
+  deleteInvite(id: ID!): Invite!
+
+  login(input: Login!): String!
+  refreshToken(input: RefreshTokenInput!): String!
+}
