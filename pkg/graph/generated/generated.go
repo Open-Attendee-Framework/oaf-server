@@ -12,7 +12,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/concertLabs/oaf-server/graph/model"
+	"github.com/concertLabs/oaf-server/pkg/graph/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -1002,7 +1002,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "graph/schema.graphqls", Input: `# GraphQL schema example
+	{Name: "api/graph/schema.graphqls", Input: `# GraphQL schema example
 #
 # https://gqlgen.com/getting-started/
 
@@ -1259,7 +1259,7 @@ func (ec *executionContext) field_Mutation_createEvent_args(ctx context.Context,
 	var arg0 model.NewEvent
 	if tmp, ok := rawArgs["event"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("event"))
-		arg0, err = ec.unmarshalNNewEvent2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐNewEvent(ctx, tmp)
+		arg0, err = ec.unmarshalNNewEvent2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐNewEvent(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1274,7 +1274,7 @@ func (ec *executionContext) field_Mutation_createInvite_args(ctx context.Context
 	var arg0 model.NewInvite
 	if tmp, ok := rawArgs["invite"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("invite"))
-		arg0, err = ec.unmarshalNNewInvite2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐNewInvite(ctx, tmp)
+		arg0, err = ec.unmarshalNNewInvite2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐNewInvite(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1289,7 +1289,7 @@ func (ec *executionContext) field_Mutation_createOrganization_args(ctx context.C
 	var arg0 model.NewOrganization
 	if tmp, ok := rawArgs["organization"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("organization"))
-		arg0, err = ec.unmarshalNNewOrganization2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐNewOrganization(ctx, tmp)
+		arg0, err = ec.unmarshalNNewOrganization2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐNewOrganization(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1337,7 +1337,7 @@ func (ec *executionContext) field_Mutation_createSection_args(ctx context.Contex
 	var arg0 model.NewSection
 	if tmp, ok := rawArgs["section"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("section"))
-		arg0, err = ec.unmarshalNNewSection2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐNewSection(ctx, tmp)
+		arg0, err = ec.unmarshalNNewSection2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐNewSection(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1352,7 +1352,7 @@ func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, 
 	var arg0 model.NewUser
 	if tmp, ok := rawArgs["user"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("user"))
-		arg0, err = ec.unmarshalNNewUser2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐNewUser(ctx, tmp)
+		arg0, err = ec.unmarshalNNewUser2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐNewUser(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1505,7 +1505,7 @@ func (ec *executionContext) field_Mutation_login_args(ctx context.Context, rawAr
 	var arg0 model.Login
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNLogin2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐLogin(ctx, tmp)
+		arg0, err = ec.unmarshalNLogin2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐLogin(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1520,7 +1520,7 @@ func (ec *executionContext) field_Mutation_refreshToken_args(ctx context.Context
 	var arg0 model.RefreshTokenInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNRefreshTokenInput2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐRefreshTokenInput(ctx, tmp)
+		arg0, err = ec.unmarshalNRefreshTokenInput2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐRefreshTokenInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1841,7 +1841,7 @@ func (ec *executionContext) field_Query_attendees_args(ctx context.Context, rawA
 	var arg2 *model.Commitment
 	if tmp, ok := rawArgs["commitment"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("commitment"))
-		arg2, err = ec.unmarshalOCommitment2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐCommitment(ctx, tmp)
+		arg2, err = ec.unmarshalOCommitment2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐCommitment(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2165,7 +2165,7 @@ func (ec *executionContext) _Attendee_user(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Attendee_event(ctx context.Context, field graphql.CollectedField, obj *model.Attendee) (ret graphql.Marshaler) {
@@ -2200,7 +2200,7 @@ func (ec *executionContext) _Attendee_event(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.Event)
 	fc.Result = res
-	return ec.marshalNEvent2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐEvent(ctx, field.Selections, res)
+	return ec.marshalNEvent2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐEvent(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Attendee_Commitment(ctx context.Context, field graphql.CollectedField, obj *model.Attendee) (ret graphql.Marshaler) {
@@ -2235,7 +2235,7 @@ func (ec *executionContext) _Attendee_Commitment(ctx context.Context, field grap
 	}
 	res := resTmp.(model.Commitment)
 	fc.Result = res
-	return ec.marshalNCommitment2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐCommitment(ctx, field.Selections, res)
+	return ec.marshalNCommitment2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐCommitment(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Attendee_Comment(ctx context.Context, field graphql.CollectedField, obj *model.Attendee) (ret graphql.Marshaler) {
@@ -2372,7 +2372,7 @@ func (ec *executionContext) _Comment_creator(ctx context.Context, field graphql.
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Comment_event(ctx context.Context, field graphql.CollectedField, obj *model.Comment) (ret graphql.Marshaler) {
@@ -2407,7 +2407,7 @@ func (ec *executionContext) _Comment_event(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(*model.Event)
 	fc.Result = res
-	return ec.marshalNEvent2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐEvent(ctx, field.Selections, res)
+	return ec.marshalNEvent2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐEvent(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Event_id(ctx context.Context, field graphql.CollectedField, obj *model.Event) (ret graphql.Marshaler) {
@@ -2643,7 +2643,7 @@ func (ec *executionContext) _Event_creator(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Event_comments(ctx context.Context, field graphql.CollectedField, obj *model.Event) (ret graphql.Marshaler) {
@@ -2675,7 +2675,7 @@ func (ec *executionContext) _Event_comments(ctx context.Context, field graphql.C
 	}
 	res := resTmp.([]*model.Comment)
 	fc.Result = res
-	return ec.marshalOComment2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐCommentᚄ(ctx, field.Selections, res)
+	return ec.marshalOComment2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐCommentᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Event_attendees(ctx context.Context, field graphql.CollectedField, obj *model.Event) (ret graphql.Marshaler) {
@@ -2707,7 +2707,7 @@ func (ec *executionContext) _Event_attendees(ctx context.Context, field graphql.
 	}
 	res := resTmp.([]*model.Attendee)
 	fc.Result = res
-	return ec.marshalOAttendee2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐAttendeeᚄ(ctx, field.Selections, res)
+	return ec.marshalOAttendee2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐAttendeeᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Invite_id(ctx context.Context, field graphql.CollectedField, obj *model.Invite) (ret graphql.Marshaler) {
@@ -2777,7 +2777,7 @@ func (ec *executionContext) _Invite_user(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Invite_section(ctx context.Context, field graphql.CollectedField, obj *model.Invite) (ret graphql.Marshaler) {
@@ -2812,7 +2812,7 @@ func (ec *executionContext) _Invite_section(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.Section)
 	fc.Result = res
-	return ec.marshalNSection2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐSection(ctx, field.Selections, res)
+	return ec.marshalNSection2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐSection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Member_id(ctx context.Context, field graphql.CollectedField, obj *model.Member) (ret graphql.Marshaler) {
@@ -2882,7 +2882,7 @@ func (ec *executionContext) _Member_user(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Member_section(ctx context.Context, field graphql.CollectedField, obj *model.Member) (ret graphql.Marshaler) {
@@ -2917,7 +2917,7 @@ func (ec *executionContext) _Member_section(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.Section)
 	fc.Result = res
-	return ec.marshalNSection2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐSection(ctx, field.Selections, res)
+	return ec.marshalNSection2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐSection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Member_right(ctx context.Context, field graphql.CollectedField, obj *model.Member) (ret graphql.Marshaler) {
@@ -2994,7 +2994,7 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_updateUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3036,7 +3036,7 @@ func (ec *executionContext) _Mutation_updateUser(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_deleteUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3078,7 +3078,7 @@ func (ec *executionContext) _Mutation_deleteUser(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createOrganization(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3120,7 +3120,7 @@ func (ec *executionContext) _Mutation_createOrganization(ctx context.Context, fi
 	}
 	res := resTmp.(*model.Organization)
 	fc.Result = res
-	return ec.marshalNOrganization2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐOrganization(ctx, field.Selections, res)
+	return ec.marshalNOrganization2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐOrganization(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_updateOrganization(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3162,7 +3162,7 @@ func (ec *executionContext) _Mutation_updateOrganization(ctx context.Context, fi
 	}
 	res := resTmp.(*model.Organization)
 	fc.Result = res
-	return ec.marshalNOrganization2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐOrganization(ctx, field.Selections, res)
+	return ec.marshalNOrganization2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐOrganization(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_deleteOrganization(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3204,7 +3204,7 @@ func (ec *executionContext) _Mutation_deleteOrganization(ctx context.Context, fi
 	}
 	res := resTmp.(*model.Organization)
 	fc.Result = res
-	return ec.marshalNOrganization2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐOrganization(ctx, field.Selections, res)
+	return ec.marshalNOrganization2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐOrganization(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createSection(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3246,7 +3246,7 @@ func (ec *executionContext) _Mutation_createSection(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Section)
 	fc.Result = res
-	return ec.marshalNSection2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐSection(ctx, field.Selections, res)
+	return ec.marshalNSection2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐSection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_updateSection(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3288,7 +3288,7 @@ func (ec *executionContext) _Mutation_updateSection(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Section)
 	fc.Result = res
-	return ec.marshalNSection2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐSection(ctx, field.Selections, res)
+	return ec.marshalNSection2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐSection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_deleteSection(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3330,7 +3330,7 @@ func (ec *executionContext) _Mutation_deleteSection(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Section)
 	fc.Result = res
-	return ec.marshalNSection2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐSection(ctx, field.Selections, res)
+	return ec.marshalNSection2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐSection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createSectionMember(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3372,7 +3372,7 @@ func (ec *executionContext) _Mutation_createSectionMember(ctx context.Context, f
 	}
 	res := resTmp.(*model.Member)
 	fc.Result = res
-	return ec.marshalNMember2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐMember(ctx, field.Selections, res)
+	return ec.marshalNMember2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐMember(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_updateSectionMember(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3414,7 +3414,7 @@ func (ec *executionContext) _Mutation_updateSectionMember(ctx context.Context, f
 	}
 	res := resTmp.(*model.Member)
 	fc.Result = res
-	return ec.marshalNMember2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐMember(ctx, field.Selections, res)
+	return ec.marshalNMember2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐMember(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_deleteSectionMember(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3456,7 +3456,7 @@ func (ec *executionContext) _Mutation_deleteSectionMember(ctx context.Context, f
 	}
 	res := resTmp.(*model.Member)
 	fc.Result = res
-	return ec.marshalNMember2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐMember(ctx, field.Selections, res)
+	return ec.marshalNMember2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐMember(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createEvent(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3498,7 +3498,7 @@ func (ec *executionContext) _Mutation_createEvent(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Event)
 	fc.Result = res
-	return ec.marshalNEvent2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐEvent(ctx, field.Selections, res)
+	return ec.marshalNEvent2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐEvent(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_updateEvent(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3540,7 +3540,7 @@ func (ec *executionContext) _Mutation_updateEvent(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Event)
 	fc.Result = res
-	return ec.marshalNEvent2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐEvent(ctx, field.Selections, res)
+	return ec.marshalNEvent2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐEvent(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_deleteEvent(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3582,7 +3582,7 @@ func (ec *executionContext) _Mutation_deleteEvent(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Event)
 	fc.Result = res
-	return ec.marshalNEvent2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐEvent(ctx, field.Selections, res)
+	return ec.marshalNEvent2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐEvent(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createEventAttendee(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3624,7 +3624,7 @@ func (ec *executionContext) _Mutation_createEventAttendee(ctx context.Context, f
 	}
 	res := resTmp.(*model.Attendee)
 	fc.Result = res
-	return ec.marshalNAttendee2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐAttendee(ctx, field.Selections, res)
+	return ec.marshalNAttendee2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐAttendee(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_updateEventAttendee(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3666,7 +3666,7 @@ func (ec *executionContext) _Mutation_updateEventAttendee(ctx context.Context, f
 	}
 	res := resTmp.(*model.Attendee)
 	fc.Result = res
-	return ec.marshalNAttendee2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐAttendee(ctx, field.Selections, res)
+	return ec.marshalNAttendee2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐAttendee(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_deleteEventAttendee(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3708,7 +3708,7 @@ func (ec *executionContext) _Mutation_deleteEventAttendee(ctx context.Context, f
 	}
 	res := resTmp.(*model.Attendee)
 	fc.Result = res
-	return ec.marshalNAttendee2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐAttendee(ctx, field.Selections, res)
+	return ec.marshalNAttendee2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐAttendee(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createEventComment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3750,7 +3750,7 @@ func (ec *executionContext) _Mutation_createEventComment(ctx context.Context, fi
 	}
 	res := resTmp.(*model.Comment)
 	fc.Result = res
-	return ec.marshalNComment2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐComment(ctx, field.Selections, res)
+	return ec.marshalNComment2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐComment(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_updateEventComment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3792,7 +3792,7 @@ func (ec *executionContext) _Mutation_updateEventComment(ctx context.Context, fi
 	}
 	res := resTmp.(*model.Comment)
 	fc.Result = res
-	return ec.marshalNComment2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐComment(ctx, field.Selections, res)
+	return ec.marshalNComment2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐComment(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_deleteEventComment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3834,7 +3834,7 @@ func (ec *executionContext) _Mutation_deleteEventComment(ctx context.Context, fi
 	}
 	res := resTmp.(*model.Comment)
 	fc.Result = res
-	return ec.marshalNComment2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐComment(ctx, field.Selections, res)
+	return ec.marshalNComment2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐComment(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createInvite(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3876,7 +3876,7 @@ func (ec *executionContext) _Mutation_createInvite(ctx context.Context, field gr
 	}
 	res := resTmp.(*model.Invite)
 	fc.Result = res
-	return ec.marshalNInvite2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐInvite(ctx, field.Selections, res)
+	return ec.marshalNInvite2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐInvite(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_deleteInvite(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3918,7 +3918,7 @@ func (ec *executionContext) _Mutation_deleteInvite(ctx context.Context, field gr
 	}
 	res := resTmp.(*model.Invite)
 	fc.Result = res
-	return ec.marshalNInvite2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐInvite(ctx, field.Selections, res)
+	return ec.marshalNInvite2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐInvite(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_login(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4104,7 +4104,7 @@ func (ec *executionContext) _Organization_sections(ctx context.Context, field gr
 	}
 	res := resTmp.([]*model.Section)
 	fc.Result = res
-	return ec.marshalOSection2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐSectionᚄ(ctx, field.Selections, res)
+	return ec.marshalOSection2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐSectionᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Organization_picture(ctx context.Context, field graphql.CollectedField, obj *model.Organization) (ret graphql.Marshaler) {
@@ -4175,7 +4175,7 @@ func (ec *executionContext) _Query_user(ctx context.Context, field graphql.Colle
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalOUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_organization(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4214,7 +4214,7 @@ func (ec *executionContext) _Query_organization(ctx context.Context, field graph
 	}
 	res := resTmp.(*model.Organization)
 	fc.Result = res
-	return ec.marshalOOrganization2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐOrganization(ctx, field.Selections, res)
+	return ec.marshalOOrganization2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐOrganization(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_section(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4253,7 +4253,7 @@ func (ec *executionContext) _Query_section(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(*model.Section)
 	fc.Result = res
-	return ec.marshalOSection2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐSection(ctx, field.Selections, res)
+	return ec.marshalOSection2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐSection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_member(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4292,7 +4292,7 @@ func (ec *executionContext) _Query_member(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.(*model.Member)
 	fc.Result = res
-	return ec.marshalOMember2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐMember(ctx, field.Selections, res)
+	return ec.marshalOMember2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐMember(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_members(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4331,7 +4331,7 @@ func (ec *executionContext) _Query_members(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.([]*model.Member)
 	fc.Result = res
-	return ec.marshalOMember2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐMemberᚄ(ctx, field.Selections, res)
+	return ec.marshalOMember2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐMemberᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_event(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4370,7 +4370,7 @@ func (ec *executionContext) _Query_event(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.(*model.Event)
 	fc.Result = res
-	return ec.marshalOEvent2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐEvent(ctx, field.Selections, res)
+	return ec.marshalOEvent2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐEvent(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_events(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4409,7 +4409,7 @@ func (ec *executionContext) _Query_events(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.([]*model.Event)
 	fc.Result = res
-	return ec.marshalOEvent2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐEventᚄ(ctx, field.Selections, res)
+	return ec.marshalOEvent2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐEventᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_comment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4448,7 +4448,7 @@ func (ec *executionContext) _Query_comment(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(*model.Comment)
 	fc.Result = res
-	return ec.marshalOComment2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐComment(ctx, field.Selections, res)
+	return ec.marshalOComment2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐComment(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_comments(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4487,7 +4487,7 @@ func (ec *executionContext) _Query_comments(ctx context.Context, field graphql.C
 	}
 	res := resTmp.([]*model.Comment)
 	fc.Result = res
-	return ec.marshalOComment2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐCommentᚄ(ctx, field.Selections, res)
+	return ec.marshalOComment2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐCommentᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_attendee(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4526,7 +4526,7 @@ func (ec *executionContext) _Query_attendee(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.Attendee)
 	fc.Result = res
-	return ec.marshalOAttendee2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐAttendee(ctx, field.Selections, res)
+	return ec.marshalOAttendee2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐAttendee(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_attendees(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4565,7 +4565,7 @@ func (ec *executionContext) _Query_attendees(ctx context.Context, field graphql.
 	}
 	res := resTmp.([]*model.Attendee)
 	fc.Result = res
-	return ec.marshalOAttendee2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐAttendeeᚄ(ctx, field.Selections, res)
+	return ec.marshalOAttendee2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐAttendeeᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_invite(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4604,7 +4604,7 @@ func (ec *executionContext) _Query_invite(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.(*model.Invite)
 	fc.Result = res
-	return ec.marshalOInvite2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐInvite(ctx, field.Selections, res)
+	return ec.marshalOInvite2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐInvite(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_invites(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4643,7 +4643,7 @@ func (ec *executionContext) _Query_invites(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.([]*model.Invite)
 	fc.Result = res
-	return ec.marshalOInvite2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐInviteᚄ(ctx, field.Selections, res)
+	return ec.marshalOInvite2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐInviteᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4819,7 +4819,7 @@ func (ec *executionContext) _Section_organization(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Organization)
 	fc.Result = res
-	return ec.marshalNOrganization2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐOrganization(ctx, field.Selections, res)
+	return ec.marshalNOrganization2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐOrganization(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Section_member(ctx context.Context, field graphql.CollectedField, obj *model.Section) (ret graphql.Marshaler) {
@@ -4851,7 +4851,7 @@ func (ec *executionContext) _Section_member(ctx context.Context, field graphql.C
 	}
 	res := resTmp.([]*model.Member)
 	fc.Result = res
-	return ec.marshalOMember2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐMemberᚄ(ctx, field.Selections, res)
+	return ec.marshalOMember2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐMemberᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
@@ -7420,11 +7420,11 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAttendee2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐAttendee(ctx context.Context, sel ast.SelectionSet, v model.Attendee) graphql.Marshaler {
+func (ec *executionContext) marshalNAttendee2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐAttendee(ctx context.Context, sel ast.SelectionSet, v model.Attendee) graphql.Marshaler {
 	return ec._Attendee(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNAttendee2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐAttendee(ctx context.Context, sel ast.SelectionSet, v *model.Attendee) graphql.Marshaler {
+func (ec *executionContext) marshalNAttendee2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐAttendee(ctx context.Context, sel ast.SelectionSet, v *model.Attendee) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -7449,11 +7449,11 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNComment2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐComment(ctx context.Context, sel ast.SelectionSet, v model.Comment) graphql.Marshaler {
+func (ec *executionContext) marshalNComment2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐComment(ctx context.Context, sel ast.SelectionSet, v model.Comment) graphql.Marshaler {
 	return ec._Comment(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNComment2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐComment(ctx context.Context, sel ast.SelectionSet, v *model.Comment) graphql.Marshaler {
+func (ec *executionContext) marshalNComment2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐComment(ctx context.Context, sel ast.SelectionSet, v *model.Comment) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -7463,13 +7463,13 @@ func (ec *executionContext) marshalNComment2ᚖgithubᚗcomᚋconcertLabsᚋoaf�
 	return ec._Comment(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNCommitment2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐCommitment(ctx context.Context, v interface{}) (model.Commitment, error) {
+func (ec *executionContext) unmarshalNCommitment2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐCommitment(ctx context.Context, v interface{}) (model.Commitment, error) {
 	var res model.Commitment
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNCommitment2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐCommitment(ctx context.Context, sel ast.SelectionSet, v model.Commitment) graphql.Marshaler {
+func (ec *executionContext) marshalNCommitment2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐCommitment(ctx context.Context, sel ast.SelectionSet, v model.Commitment) graphql.Marshaler {
 	return v
 }
 
@@ -7488,11 +7488,11 @@ func (ec *executionContext) marshalNDateTime2string(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) marshalNEvent2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐEvent(ctx context.Context, sel ast.SelectionSet, v model.Event) graphql.Marshaler {
+func (ec *executionContext) marshalNEvent2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐEvent(ctx context.Context, sel ast.SelectionSet, v model.Event) graphql.Marshaler {
 	return ec._Event(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNEvent2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐEvent(ctx context.Context, sel ast.SelectionSet, v *model.Event) graphql.Marshaler {
+func (ec *executionContext) marshalNEvent2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐEvent(ctx context.Context, sel ast.SelectionSet, v *model.Event) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -7532,11 +7532,11 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) marshalNInvite2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐInvite(ctx context.Context, sel ast.SelectionSet, v model.Invite) graphql.Marshaler {
+func (ec *executionContext) marshalNInvite2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐInvite(ctx context.Context, sel ast.SelectionSet, v model.Invite) graphql.Marshaler {
 	return ec._Invite(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNInvite2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐInvite(ctx context.Context, sel ast.SelectionSet, v *model.Invite) graphql.Marshaler {
+func (ec *executionContext) marshalNInvite2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐInvite(ctx context.Context, sel ast.SelectionSet, v *model.Invite) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -7546,16 +7546,16 @@ func (ec *executionContext) marshalNInvite2ᚖgithubᚗcomᚋconcertLabsᚋoaf�
 	return ec._Invite(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNLogin2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐLogin(ctx context.Context, v interface{}) (model.Login, error) {
+func (ec *executionContext) unmarshalNLogin2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐLogin(ctx context.Context, v interface{}) (model.Login, error) {
 	res, err := ec.unmarshalInputLogin(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNMember2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐMember(ctx context.Context, sel ast.SelectionSet, v model.Member) graphql.Marshaler {
+func (ec *executionContext) marshalNMember2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐMember(ctx context.Context, sel ast.SelectionSet, v model.Member) graphql.Marshaler {
 	return ec._Member(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNMember2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐMember(ctx context.Context, sel ast.SelectionSet, v *model.Member) graphql.Marshaler {
+func (ec *executionContext) marshalNMember2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐMember(ctx context.Context, sel ast.SelectionSet, v *model.Member) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -7565,36 +7565,36 @@ func (ec *executionContext) marshalNMember2ᚖgithubᚗcomᚋconcertLabsᚋoaf�
 	return ec._Member(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNNewEvent2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐNewEvent(ctx context.Context, v interface{}) (model.NewEvent, error) {
+func (ec *executionContext) unmarshalNNewEvent2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐNewEvent(ctx context.Context, v interface{}) (model.NewEvent, error) {
 	res, err := ec.unmarshalInputNewEvent(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNNewInvite2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐNewInvite(ctx context.Context, v interface{}) (model.NewInvite, error) {
+func (ec *executionContext) unmarshalNNewInvite2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐNewInvite(ctx context.Context, v interface{}) (model.NewInvite, error) {
 	res, err := ec.unmarshalInputNewInvite(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNNewOrganization2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐNewOrganization(ctx context.Context, v interface{}) (model.NewOrganization, error) {
+func (ec *executionContext) unmarshalNNewOrganization2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐNewOrganization(ctx context.Context, v interface{}) (model.NewOrganization, error) {
 	res, err := ec.unmarshalInputNewOrganization(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNNewSection2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐNewSection(ctx context.Context, v interface{}) (model.NewSection, error) {
+func (ec *executionContext) unmarshalNNewSection2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐNewSection(ctx context.Context, v interface{}) (model.NewSection, error) {
 	res, err := ec.unmarshalInputNewSection(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNNewUser2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐNewUser(ctx context.Context, v interface{}) (model.NewUser, error) {
+func (ec *executionContext) unmarshalNNewUser2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐNewUser(ctx context.Context, v interface{}) (model.NewUser, error) {
 	res, err := ec.unmarshalInputNewUser(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNOrganization2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐOrganization(ctx context.Context, sel ast.SelectionSet, v model.Organization) graphql.Marshaler {
+func (ec *executionContext) marshalNOrganization2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐOrganization(ctx context.Context, sel ast.SelectionSet, v model.Organization) graphql.Marshaler {
 	return ec._Organization(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNOrganization2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐOrganization(ctx context.Context, sel ast.SelectionSet, v *model.Organization) graphql.Marshaler {
+func (ec *executionContext) marshalNOrganization2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐOrganization(ctx context.Context, sel ast.SelectionSet, v *model.Organization) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -7604,16 +7604,16 @@ func (ec *executionContext) marshalNOrganization2ᚖgithubᚗcomᚋconcertLabs�
 	return ec._Organization(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNRefreshTokenInput2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐRefreshTokenInput(ctx context.Context, v interface{}) (model.RefreshTokenInput, error) {
+func (ec *executionContext) unmarshalNRefreshTokenInput2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐRefreshTokenInput(ctx context.Context, v interface{}) (model.RefreshTokenInput, error) {
 	res, err := ec.unmarshalInputRefreshTokenInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSection2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐSection(ctx context.Context, sel ast.SelectionSet, v model.Section) graphql.Marshaler {
+func (ec *executionContext) marshalNSection2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐSection(ctx context.Context, sel ast.SelectionSet, v model.Section) graphql.Marshaler {
 	return ec._Section(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNSection2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐSection(ctx context.Context, sel ast.SelectionSet, v *model.Section) graphql.Marshaler {
+func (ec *executionContext) marshalNSection2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐSection(ctx context.Context, sel ast.SelectionSet, v *model.Section) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -7638,11 +7638,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNUser2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2githubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
 	return ec._User(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -7909,7 +7909,7 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
-func (ec *executionContext) marshalOAttendee2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐAttendeeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Attendee) graphql.Marshaler {
+func (ec *executionContext) marshalOAttendee2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐAttendeeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Attendee) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -7936,7 +7936,7 @@ func (ec *executionContext) marshalOAttendee2ᚕᚖgithubᚗcomᚋconcertLabsᚋ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNAttendee2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐAttendee(ctx, sel, v[i])
+			ret[i] = ec.marshalNAttendee2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐAttendee(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -7956,7 +7956,7 @@ func (ec *executionContext) marshalOAttendee2ᚕᚖgithubᚗcomᚋconcertLabsᚋ
 	return ret
 }
 
-func (ec *executionContext) marshalOAttendee2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐAttendee(ctx context.Context, sel ast.SelectionSet, v *model.Attendee) graphql.Marshaler {
+func (ec *executionContext) marshalOAttendee2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐAttendee(ctx context.Context, sel ast.SelectionSet, v *model.Attendee) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -7987,7 +7987,7 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return graphql.MarshalBoolean(*v)
 }
 
-func (ec *executionContext) marshalOComment2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐCommentᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Comment) graphql.Marshaler {
+func (ec *executionContext) marshalOComment2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐCommentᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Comment) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -8014,7 +8014,7 @@ func (ec *executionContext) marshalOComment2ᚕᚖgithubᚗcomᚋconcertLabsᚋo
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNComment2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐComment(ctx, sel, v[i])
+			ret[i] = ec.marshalNComment2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐComment(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -8034,14 +8034,14 @@ func (ec *executionContext) marshalOComment2ᚕᚖgithubᚗcomᚋconcertLabsᚋo
 	return ret
 }
 
-func (ec *executionContext) marshalOComment2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐComment(ctx context.Context, sel ast.SelectionSet, v *model.Comment) graphql.Marshaler {
+func (ec *executionContext) marshalOComment2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐComment(ctx context.Context, sel ast.SelectionSet, v *model.Comment) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Comment(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOCommitment2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐCommitment(ctx context.Context, v interface{}) (*model.Commitment, error) {
+func (ec *executionContext) unmarshalOCommitment2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐCommitment(ctx context.Context, v interface{}) (*model.Commitment, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -8050,7 +8050,7 @@ func (ec *executionContext) unmarshalOCommitment2ᚖgithubᚗcomᚋconcertLabs�
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOCommitment2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐCommitment(ctx context.Context, sel ast.SelectionSet, v *model.Commitment) graphql.Marshaler {
+func (ec *executionContext) marshalOCommitment2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐCommitment(ctx context.Context, sel ast.SelectionSet, v *model.Commitment) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -8072,7 +8072,7 @@ func (ec *executionContext) marshalODateTime2ᚖstring(ctx context.Context, sel 
 	return graphql.MarshalString(*v)
 }
 
-func (ec *executionContext) marshalOEvent2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐEventᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Event) graphql.Marshaler {
+func (ec *executionContext) marshalOEvent2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐEventᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Event) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -8099,7 +8099,7 @@ func (ec *executionContext) marshalOEvent2ᚕᚖgithubᚗcomᚋconcertLabsᚋoaf
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNEvent2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐEvent(ctx, sel, v[i])
+			ret[i] = ec.marshalNEvent2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐEvent(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -8119,7 +8119,7 @@ func (ec *executionContext) marshalOEvent2ᚕᚖgithubᚗcomᚋconcertLabsᚋoaf
 	return ret
 }
 
-func (ec *executionContext) marshalOEvent2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐEvent(ctx context.Context, sel ast.SelectionSet, v *model.Event) graphql.Marshaler {
+func (ec *executionContext) marshalOEvent2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐEvent(ctx context.Context, sel ast.SelectionSet, v *model.Event) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -8156,7 +8156,7 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	return graphql.MarshalInt(*v)
 }
 
-func (ec *executionContext) marshalOInvite2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐInviteᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Invite) graphql.Marshaler {
+func (ec *executionContext) marshalOInvite2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐInviteᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Invite) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -8183,7 +8183,7 @@ func (ec *executionContext) marshalOInvite2ᚕᚖgithubᚗcomᚋconcertLabsᚋoa
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNInvite2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐInvite(ctx, sel, v[i])
+			ret[i] = ec.marshalNInvite2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐInvite(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -8203,14 +8203,14 @@ func (ec *executionContext) marshalOInvite2ᚕᚖgithubᚗcomᚋconcertLabsᚋoa
 	return ret
 }
 
-func (ec *executionContext) marshalOInvite2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐInvite(ctx context.Context, sel ast.SelectionSet, v *model.Invite) graphql.Marshaler {
+func (ec *executionContext) marshalOInvite2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐInvite(ctx context.Context, sel ast.SelectionSet, v *model.Invite) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Invite(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOMember2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐMemberᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Member) graphql.Marshaler {
+func (ec *executionContext) marshalOMember2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐMemberᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Member) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -8237,7 +8237,7 @@ func (ec *executionContext) marshalOMember2ᚕᚖgithubᚗcomᚋconcertLabsᚋoa
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNMember2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐMember(ctx, sel, v[i])
+			ret[i] = ec.marshalNMember2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐMember(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -8257,21 +8257,21 @@ func (ec *executionContext) marshalOMember2ᚕᚖgithubᚗcomᚋconcertLabsᚋoa
 	return ret
 }
 
-func (ec *executionContext) marshalOMember2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐMember(ctx context.Context, sel ast.SelectionSet, v *model.Member) graphql.Marshaler {
+func (ec *executionContext) marshalOMember2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐMember(ctx context.Context, sel ast.SelectionSet, v *model.Member) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Member(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOOrganization2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐOrganization(ctx context.Context, sel ast.SelectionSet, v *model.Organization) graphql.Marshaler {
+func (ec *executionContext) marshalOOrganization2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐOrganization(ctx context.Context, sel ast.SelectionSet, v *model.Organization) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Organization(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOSection2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐSectionᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Section) graphql.Marshaler {
+func (ec *executionContext) marshalOSection2ᚕᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐSectionᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Section) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -8298,7 +8298,7 @@ func (ec *executionContext) marshalOSection2ᚕᚖgithubᚗcomᚋconcertLabsᚋo
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNSection2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐSection(ctx, sel, v[i])
+			ret[i] = ec.marshalNSection2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐSection(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -8318,7 +8318,7 @@ func (ec *executionContext) marshalOSection2ᚕᚖgithubᚗcomᚋconcertLabsᚋo
 	return ret
 }
 
-func (ec *executionContext) marshalOSection2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐSection(ctx context.Context, sel ast.SelectionSet, v *model.Section) graphql.Marshaler {
+func (ec *executionContext) marshalOSection2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐSection(ctx context.Context, sel ast.SelectionSet, v *model.Section) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -8349,7 +8349,7 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return graphql.MarshalString(*v)
 }
 
-func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋconcertLabsᚋoafᚑserverᚋpkgᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

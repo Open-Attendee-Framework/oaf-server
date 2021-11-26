@@ -1,4 +1,4 @@
-package graph
+package resolver
 
 // This file will be automatically regenerated based on the schema, any resolver implementations
 // will be copied through when generating and any unknown code will be moved to the end.
@@ -7,8 +7,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/concertLabs/oaf-server/graph/generated"
-	"github.com/concertLabs/oaf-server/graph/model"
+	"github.com/concertLabs/oaf-server/pkg/graph/generated"
+	"github.com/concertLabs/oaf-server/pkg/graph/model"
 )
 
 func (r *mutationResolver) CreateUser(ctx context.Context, user model.NewUser) (*model.User, error) {
